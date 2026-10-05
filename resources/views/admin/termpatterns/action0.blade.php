@@ -1,0 +1,1 @@
+<a href="{!! route('admin.termpatterns.edit', $termpattern->id) !!}" class="btn btn-sm btn-flat btn-primary">{{ trans('admin_message.termpatterns.edit') }}</a>

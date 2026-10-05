@@ -1,0 +1,1 @@
+<a href="{!! $terms !!}" class="btn btn-primary" role="button" aria-pressed="true" target="_blank"><i class="fa fa-eye"></i></a>

@@ -1,0 +1,52 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+
+class Membership extends Model
+{
+
+    protected $dates = ['expired_time', 'pause_time'];
+
+    protected $fillable = [ 'user_id', 'terms_number', 'expired_time', 'pause_time','pause_flag'];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function getExpiredTimeAttribute()
+    {
+        return  Carbon::parse($this->attributes['expired_time'])->format('d.M.Y.');
+    }
+
+    public function getPauseTimeAttribute()
+    {
+        return  Carbon::parse($this->attributes['pause_time'])->format('d.M.Y. H:i');
+    }
+
+    public function getCreatedAtAttribute()
+    {
+        return  Carbon::parse($this->attributes['created_at'])->format('d.M.Y.');
+    }
+
+     // scope expired
+    public function scopeExpired($query){
+        $query->where('expired_at', '<=', Carbon::now() );
+    }
+
+    // scope unexpired
+    public function scopeUnexpired($query){
+        $query->where('expired_at', '>=', Carbon::now() );
+    }
+
+      // scope pasued
+    public function scopePasued($query)
+    {
+        return $query->where('pasue_flag', 1);
+    }
+
+
+}

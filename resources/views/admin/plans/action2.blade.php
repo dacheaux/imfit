@@ -1,0 +1,1 @@
+{!! Form::checkbox('seen', $plans->id,  $plans->seen) !!}

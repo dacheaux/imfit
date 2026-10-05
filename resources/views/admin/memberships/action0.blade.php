@@ -1,0 +1,1 @@
+<a href="{!! route('admin.memberships.edit', $membership->id) !!}" class="btn btn-sm btn-flat btn-primary">{{ trans('admin_message.membership.edit') }}</a>

@@ -1,0 +1,1 @@
+<a href="{!! route('admin.userplans.edit', $userplans->id) !!}" class="btn btn-sm btn-flat btn-primary">{{ trans('admin_message.userplans.edit') }}</a>

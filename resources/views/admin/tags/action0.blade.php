@@ -1,0 +1,1 @@
+<a href="{!! route('admin.tags.edit', $tags->id) !!}" class="btn btn-sm btn-flat btn-primary">{{ trans('admin_message.tags.edit') }}</a>
