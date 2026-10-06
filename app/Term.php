@@ -2,12 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 
 class Term extends Model
 {
 
-    protected $dates = ['start_datetime', 'end_datetime'];
+    protected $casts = [
+        'start_datetime' => 'datetime',
+        'end_datetime' => 'datetime',
+    ];
 
     protected $fillable = [ 'workout_id', 'trener_id', 'slots', 'note','start_datetime', 'end_datetime','type'];
 

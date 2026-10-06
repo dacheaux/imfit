@@ -2,13 +2,16 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class UserPlan extends Model
 {
 
-    protected  $dates = ['expired_time', 'pause_time', 'pause_from'];
+    protected $casts = [
+        'expired_time' => 'datetime',
+        'pause_time' => 'datetime',
+        'pause_from' => 'datetime',
+    ];
 
     protected $fillable = [ 'user_id', 'plan_id', 'terms_number', 'expired_time', 'pause_time', 'pause_from','pause_flag', 'active', 'paid', 'approved'];
 

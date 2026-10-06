@@ -2,13 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class Membership extends Model
 {
 
-    protected $dates = ['expired_time', 'pause_time'];
+    protected $casts = [
+        'expired_time' => 'datetime',
+        'pause_time' => 'datetime',
+    ];
 
     protected $fillable = [ 'user_id', 'terms_number', 'expired_time', 'pause_time','pause_flag'];
 

@@ -154,7 +154,6 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        \Ktquez\Tinymce\TinymceServiceProvider::class,
         //Roumen\Sitemap\SitemapServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         \Conner\Tagging\Providers\TaggingServiceProvider::class,

@@ -6,7 +6,7 @@ namespace App\Repositories\Eloquent;
 use App\Repositories\Contracts\TagRepository;
 
 use Conner\Tagging\Model\Tag;
-use Kurt\Repoist\Repositories\Eloquent\AbstractRepository;
+use App\Repositories\Eloquent\AbstractRepository;
 
 class EloquentTagRepository extends AbstractRepository implements TagRepository
 {

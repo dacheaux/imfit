@@ -7,7 +7,7 @@ use App\Category;
 use App\Repositories\Contracts\CategoryRepository;
 
 use Conner\Tagging\Model\Tag;
-use Kurt\Repoist\Repositories\Eloquent\AbstractRepository;
+use App\Repositories\Eloquent\AbstractRepository;
 
 class EloquentCategoryRepository extends AbstractRepository implements CategoryRepository
 {

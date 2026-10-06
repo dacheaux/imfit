@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Traits\HasComments;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 

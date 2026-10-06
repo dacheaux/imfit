@@ -3,13 +3,14 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
 class Entry extends Model
 {
     protected $table = 'entrances';
 
-    protected $dates = ['entry_time'];
+    protected $casts = [
+        'entry_time' => 'datetime',
+    ];
 
     protected $fillable = [ 'user_id', 'entry_time', 'type', 'payment_status', 'plan_status', 'message'];
 

@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Support\Carbon;
 use Intervention\Image\Facades\Image;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
 class Photo extends Model

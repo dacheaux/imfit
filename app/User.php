@@ -4,6 +4,8 @@ namespace App;
 
 
 use App\Notifications\WellcomeNotify;
+use App\Traits\SerializesDates;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
@@ -12,10 +14,12 @@ use App\Notifications\MyResetPassword as ResetPasswordNotification;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, SerializesDates;
 
 
-    protected $dates = ['birth'];
+    protected $casts = [
+        'birth' => 'datetime',
+    ];
 
     protected $attributes = ['birth'  => null];
 
