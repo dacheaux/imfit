@@ -685,7 +685,7 @@ function timetableWeek(el, tiva_timetables, firstDayWeek) {
 
                     + '<div class="timetable-name">' + timetables[t].name + '</div>'
 
-                    + '<div class="timetable-time">' + timetables[t].start_time  '</div>'
+                    + '<div class="timetable-time">' + timetables[t].start_time + '</div>'
 
                     + '</div>'
 
@@ -697,7 +697,7 @@ function timetableWeek(el, tiva_timetables, firstDayWeek) {
 
                     + timetables[t].name + ' - ' + timetables[t].coach +
 
-                    + '</div>'
+                    '</div>'
 
                     + '<div class="popup-body">'
 
@@ -969,8 +969,8 @@ function timetableList(el, tiva_timetables, firstDayWeek) {
                         + '<div class="popup-header color-' + timetables[t].color + '">'
 
                         + timetables[t].name +
- 
-                        + '</div>'
+
+                        '</div>'
 
                         + '<div class="popup-body">'
 
