@@ -2,14 +2,14 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/imfitrs/fitapp
-    - /bin/cp -R $SRCDIR/app $DEPLOYPATH/
-    - /bin/cp -R $SRCDIR/bootstrap $DEPLOYPATH/
-    - /bin/cp -R $SRCDIR/config $DEPLOYPATH/
-    - /bin/cp -R $SRCDIR/database $DEPLOYPATH/
-    - /bin/cp -R $SRCDIR/resources $DEPLOYPATH/
-    - /bin/cp -R $SRCDIR/routes $DEPLOYPATH/
-    - /bin/cp -R $SRCDIR/public $DEPLOYPATH/
-    - /bin/cp $SRCDIR/artisan $DEPLOYPATH/
-    - /bin/cp $SRCDIR/composer.json $DEPLOYPATH/
-    - /bin/cp $SRCDIR/composer.lock $DEPLOYPATH/
-    - /bin/cp $SRCDIR/server.php $DEPLOYPATH/
+    - /bin/cp -R app $DEPLOYPATH/
+    - /bin/cp -R bootstrap $DEPLOYPATH/
+    - /bin/cp -R config $DEPLOYPATH/
+    - /bin/cp -R database $DEPLOYPATH/
+    - /bin/cp -R resources $DEPLOYPATH/
+    - /bin/cp -R routes $DEPLOYPATH/
+    - /bin/cp -R public $DEPLOYPATH/
+    - /bin/cp artisan $DEPLOYPATH/
+    - /bin/cp composer.json $DEPLOYPATH/
+    - /bin/cp composer.lock $DEPLOYPATH/
+    - /bin/cp server.php $DEPLOYPATH/
