@@ -75,7 +75,7 @@
 		<div class="row">
 			<div class="col-lg-12 col-md-12">
 				<div class="ff_btm_footer_box">
-					<p>Copyright &copy; 2023 Sva prava zadražana. imfit.rs</p>
+					<p>Copyright &copy; 2026 Sva prava zadražana. imfit.rs</p>
 				</div>
 			</div>
 		</div>

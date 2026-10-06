@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -110,7 +111,7 @@ class UsersController extends Controller
     {
 
 
-        $gpasswod = str_random(8);
+        $gpasswod = Str::random(8);
         $user = $this->users;
 
 

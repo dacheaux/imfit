@@ -40,7 +40,7 @@ class ProductsController extends Controller
             $products =  $this->products->with('categories')->where('category_id', $cats->id)->orderBy('position')->get();
         }
 
-        return Datatables::of($products)
+        return DataTables::of($products)
             ->addColumn('image', function($product)  {
                 return view('admin.products.image', compact('product'))->render();
             })

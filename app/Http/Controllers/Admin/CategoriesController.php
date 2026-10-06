@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
@@ -129,7 +130,7 @@ class CategoriesController extends Controller
                 ];
                 $query = [
                     'category_name' => $request->category_name,
-                    'category_slug' => str_slug($request->category_name),
+                    'category_slug' => Str::slug($request->category_name),
                     'parent_id' => (!empty($request->parent_id))? $request->parent_id : 0,
                     'visible' => 1
                 ];

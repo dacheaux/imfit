@@ -15,7 +15,7 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot(Factory $cache, GlobalConf $settings)
     {
-        $settings = $cache->remember('settings', 60, function() use ($settings)
+        $settings = $cache->remember('settings', now()->addMinutes(60), function() use ($settings)
         {
             return $settings->find(1);
         });

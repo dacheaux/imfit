@@ -2,8 +2,7 @@
 
 namespace App;
 
-use BrianFaust\Commentable\Models\Comment;
-use BrianFaust\Commentable\Traits\HasComments;
+use App\Traits\HasComments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;

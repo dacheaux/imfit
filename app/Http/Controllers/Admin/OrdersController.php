@@ -21,7 +21,7 @@ class OrdersController extends Controller
     {
         $orders = Order::with('products')->with('user')->latest();
 
-        return Datatables::of($orders)
+        return DataTables::of($orders)
             ->addColumn('status', function($orders) {
                 return view('admin.orders.status', compact('orders'))->render();
             })
