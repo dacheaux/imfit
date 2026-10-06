@@ -155,7 +155,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         //Roumen\Sitemap\SitemapServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
         \Conner\Tagging\Providers\TaggingServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
@@ -226,7 +226,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'auth.password.tokens' => Illuminate\Auth\Passwords\TokenRepositoryInterface::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
