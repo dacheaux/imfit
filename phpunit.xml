@@ -16,6 +16,7 @@
             <directory suffix=".php">./app</directory>
         </include>
     </coverage>
+    <!-- Feature tests use MySQL database fitapp_testing (never the live app DB). Create it once, then: php artisan test -->
     <php>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
@@ -23,5 +24,7 @@
         <server name="MAIL_MAILER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
+        <server name="DB_CONNECTION" value="mysql"/>
+        <server name="DB_DATABASE" value="fitapp_testing"/>
     </php>
 </phpunit>

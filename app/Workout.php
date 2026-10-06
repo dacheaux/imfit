@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 
 class Workout extends Model
 {
+    use HasFactory;
+
      protected $fillable = ['name','workout_time'];
 
 

@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 
 class Plan extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['workout_id','name', 'workouts_number', 'plan_duration', 'price'];
 
     public function getCreatedAtAttribute()

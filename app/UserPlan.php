@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 
 class UserPlan extends Model
 {
+    use HasFactory;
+
 
     protected $casts = [
         'expired_time' => 'datetime',

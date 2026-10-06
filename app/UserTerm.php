@@ -2,9 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserTerm extends Model
 {
+    use HasFactory;
+
     protected $fillable = [ 'user_id', 'term_id', 'user_plan_id', 'user_delayed'];
 
 

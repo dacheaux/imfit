@@ -2,9 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Qrcode extends Model
 {
+    use HasFactory;
+
 
     protected $table = 'qrcodes';
 

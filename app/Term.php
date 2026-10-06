@@ -2,9 +2,12 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Term extends Model
 {
+    use HasFactory;
+
 
     protected $casts = [
         'start_datetime' => 'datetime',
