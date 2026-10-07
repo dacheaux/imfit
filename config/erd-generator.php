@@ -11,6 +11,8 @@ return [
          app_path('/'),
     ],
 
+    'recursive' => false,
+
     /*
      * The generator will automatically try to look up the model specific columns
      * and add them to the generated output. If you do not wish to use this
