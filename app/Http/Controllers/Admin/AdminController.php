@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
 
-    protected $usersPlans, $users, $contacts, $orders, $posts, $doors, $accountuserplans;
+    protected $usersPlans, $users, $contacts, $orders, $posts, $doors, $accountuserplans, $qcode, $entrances;
     /**
      * Create a new controller instance.
      *

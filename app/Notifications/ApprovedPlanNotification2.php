@@ -11,6 +11,8 @@ class ApprovedPlanNotification2 extends Notification
 {
     use Queueable;
 
+    protected $user;
+
     /**
      * Create a new notification instance.
      *

@@ -11,6 +11,8 @@ class NewPlanMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $plan, $user;
+
     /**
      * Create a new message instance.
      *

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class TermsController extends Controller
 {
-    protected $terms, $workouts, $userTerms, $users, $membership, $plan, $userPlans;
+    protected $terms, $workouts, $userTerms, $users, $membership, $plan, $userPlans, $userPlan;
 
     public function __construct(Term $terms, Workout $workouts, UserTerm $userTerms, User $users, Plan $plan, UserPlan $userPlan)
     {

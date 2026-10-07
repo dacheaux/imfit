@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller
 {
-    protected $category, $product, $user, $qcode, $order, $account;
+    protected $category, $product, $user, $qcode, $order, $account, $doors;
 
     public function __construct(Category $category, Door $doors, Product $product, User $user, Qrcode $qcode, Order $order, Account $account)
     {
