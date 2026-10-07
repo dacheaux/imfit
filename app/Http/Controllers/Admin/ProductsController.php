@@ -27,7 +27,7 @@ class ProductsController extends Controller
     {
         $categories = Category::with('categories')->where(['parent_id' => 0])->orderBy('sorting', 'ASC')->get();
 
-        return view('admin.products.index', compact('categories', $categories));
+        return view('admin.products.index', compact('categories'));
     }
 
     public function productsData(Request $request)

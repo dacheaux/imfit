@@ -26,12 +26,12 @@ class PostsController extends Controller
 
         if($request->ajax()){
             return [
-                'posts' => view('front.posts.ajaxposts',  compact('posts', $posts))->render(),
+                'posts' => view('front.posts.ajaxposts',  compact('posts'))->render(),
                 'next_page' => $posts->nextPageUrl()
             ];
         }
 
-        return view('posts.index', compact('posts', $posts));
+        return view('posts.index', compact('posts'));
     }
 
     public function getByTag(Request $request, $slug)
@@ -40,12 +40,12 @@ class PostsController extends Controller
 
         if($request->ajax()){
             return [
-                'posts' => view('front.posts.ajaxposts',  compact('posts', $posts))->render(),
+                'posts' => view('front.posts.ajaxposts',  compact('posts'))->render(),
                 'next_page' => $posts->nextPageUrl()
             ];
         }
 
-        return view('posts.index', compact('posts', $posts));
+        return view('posts.index', compact('posts'));
     }
 
     public function searchByTermPaginated(Request $input, $perPage = 8)
@@ -65,7 +65,7 @@ class PostsController extends Controller
 
         if($input->ajax()){
             return [
-                'posts' => view('front.posts.ajaxposts',  compact('posts', $posts))->render(),
+                'posts' => view('front.posts.ajaxposts',  compact('posts'))->render(),
                 'next_page' => $posts->nextPageUrl()
             ];
         }
