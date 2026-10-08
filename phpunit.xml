@@ -11,11 +11,11 @@
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">./app</directory>
         </include>
-    </coverage>
+    </source>
     <!-- Feature tests use MySQL database fitapp_testing (never the live app DB). Create it once, then: php artisan test -->
     <php>
         <server name="APP_ENV" value="testing"/>
