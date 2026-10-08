@@ -163,6 +163,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['role:admin', 'auth'], 'as' 
 
     // Users and Profile
     Route::resource('users', 'Admin\UsersController', ['except' => ['show']]);
+    Route::post('users/{id}/qrcode', ['as' => 'users.qrcode.store', 'uses' => 'Admin\UsersController@storeQrcode']);
     Route::get('profile', ['as' => 'users.profile', 'uses' => 'Admin\UsersController@profile']);
     //Route::put('profile',['as' => 'users.uprofile', 'uses' => 'Admin\UsersController@updateProfile']);
 

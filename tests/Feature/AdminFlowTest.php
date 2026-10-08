@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Notifications\ApprovedPlanNotification;
 use App\Plan;
+use App\Qrcode;
 use App\Term;
 use App\User;
 use App\UserPlan;
@@ -133,5 +134,57 @@ class AdminFlowTest extends TestCase
         ]);
 
         Notification::assertSentTo($member, ApprovedPlanNotification::class);
+    }
+
+    public function test_admin_can_edit_user_without_qrcode()
+    {
+        $this->actingAsAdmin();
+        $member = User::factory()->member()->create();
+
+        $this->get('/admin/users/'.$member->id.'/edit')
+            ->assertOk()
+            ->assertSee('Kreiraj QR kod')
+            ->assertSee('Korisnik nema QR kod.');
+    }
+
+    public function test_admin_can_generate_qrcode_for_user()
+    {
+        $this->actingAsAdmin();
+        $member = User::factory()->member()->create();
+
+        $this->post('/admin/users/'.$member->id.'/qrcode')
+            ->assertRedirect(route('admin.users.edit', $member->id));
+
+        $this->assertDatabaseHas('qrcodes', [
+            'user_id' => $member->id,
+            'qrcode_image' => 'qrcode'.$member->id.'.png',
+            'type' => 0,
+        ]);
+
+        $this->get('/admin/users/'.$member->id.'/edit')
+            ->assertOk()
+            ->assertDontSee('Kreiraj QR kod');
+    }
+
+    public function test_generating_qrcode_twice_does_not_duplicate()
+    {
+        $this->actingAsAdmin();
+        $member = User::factory()->member()->create();
+
+        $this->post('/admin/users/'.$member->id.'/qrcode');
+        $this->post('/admin/users/'.$member->id.'/qrcode')
+            ->assertRedirect(route('admin.users.edit', $member->id));
+
+        $this->assertEquals(1, Qrcode::where('user_id', $member->id)->count());
+    }
+
+    public function test_member_cannot_generate_user_qrcode()
+    {
+        $this->actingAsMember();
+        $member = User::factory()->member()->create();
+
+        $this->from('/')->post('/admin/users/'.$member->id.'/qrcode')->assertRedirect('/');
+        $this->assertGuest();
+        $this->assertDatabaseMissing('qrcodes', ['user_id' => $member->id]);
     }
 }

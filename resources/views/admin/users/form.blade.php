@@ -111,7 +111,14 @@
         <div class="box box-info">
             <div class="box-body">
                     <h3>Korisnikov QR</h3>
+                    @if($user->qrcode)
                     <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(300)->generate($user->qrcode->token)) !!} ">
+                    @else
+                    <p>Korisnik nema QR kod.</p>
+                    {{ Form::open(['route' => ['admin.users.qrcode.store', $user->id], 'method' => 'POST']) }}
+                        <button type="submit" class="btn btn-primary btn-flat">Kreiraj QR kod</button>
+                    {!! Form::close() !!}
+                    @endif
             </div>
         </div>
     </div>

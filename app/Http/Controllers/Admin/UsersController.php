@@ -125,17 +125,7 @@ class UsersController extends Controller
         }
 
         if($user){
-            $token =  bcrypt(auth()->id() . time());
-            $fileImage = 'qrcode'.$user->id.'.png';
-            $path =  public_path('images/'.$fileImage);
-            QrCode::size(500)->format('png')->generate($token,$path);
-
-            $this->qcode->create([
-                'user_id' => $user->id,
-                'token' => $token,
-                'qrcode_image' => $fileImage,
-                'type' => $user->hasRole('vežbač') ? 0 : 1
-            ]);
+            $this->createQrCodeFor($user);
 
             $this->account->create([
                 'user_id' => $user->id,
@@ -162,6 +152,23 @@ class UsersController extends Controller
         $user = $this->users->with('qrcode')->findOrFail($id);
 
         return view('admin.users.form', compact('user', 'roles'));
+    }
+
+    public function storeQrcode($id)
+    {
+        $user = $this->users->with('qrcode')->findOrFail($id);
+
+        if ($user->qrcode) {
+            flash()->overlay(trans('flash.info'), trans('flash.users.qrexists'));
+
+            return redirect()->route('admin.users.edit', $user->id);
+        }
+
+        $this->createQrCodeFor($user);
+
+        flash()->overlay(trans('flash.success'), trans('flash.users.sqrcreated'));
+
+        return redirect()->route('admin.users.edit', $user->id);
     }
 
 
@@ -202,6 +209,24 @@ class UsersController extends Controller
         } else {
             $user->roles()->detach(); //If no role is selected remove exisiting role associated to a user
         }
+    }
+
+    /**
+     * @param User $user
+     */
+    protected function createQrCodeFor(User $user)
+    {
+        $token = bcrypt(auth()->id() . time());
+        $fileImage = 'qrcode'.$user->id.'.png';
+        $path = public_path('images/'.$fileImage);
+        QrCode::size(500)->format('png')->generate($token, $path);
+
+        $this->qcode->create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'qrcode_image' => $fileImage,
+            'type' => $user->hasRole('vežbač') ? 0 : 1
+        ]);
     }
 
     /**

@@ -10,6 +10,8 @@ return [
       'sdeleted' => 'Korisink je uspešno obrisan.',
       'unauthorized' => 'Nemate dozvolu za pristup.',
       'ssent'=> 'Uspešno poslat email korisniku za reset passworda',
+      'sqrcreated' => 'QR kod je uspešno kreiran.',
+      'qrexists' => 'Korisnik već ima QR kod.',
   ],
   'contacts' => [
       'supdated' => 'Poruka je uspešno ažurirana.',
