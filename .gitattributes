@@ -3,3 +3,16 @@
 *.scss linguist-vendored
 *.js linguist-vendored
 CHANGELOG.md export-ignore
+
+# Kept out of the release zip built by scripts/build-release.ps1
+/tests export-ignore
+/scripts export-ignore
+/phpunit.xml export-ignore
+/.editorconfig export-ignore
+/.env.example export-ignore
+/.env.testing export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/README.md export-ignore
+/output.png export-ignore
+/database/create-testing-database.php export-ignore
