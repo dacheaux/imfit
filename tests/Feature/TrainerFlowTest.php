@@ -72,4 +72,58 @@ class TrainerFlowTest extends TestCase
             'term_id' => $gym['term']->id,
         ]);
     }
+
+    public function test_privileged_trainer_can_open_users_index()
+    {
+        $this->actingAsTrainer(['id' => 13]);
+
+        $this->get('/aptreneri/users')->assertOk();
+    }
+
+    public function test_other_trainers_cannot_open_users_index()
+    {
+        $this->actingAsTrainer();
+
+        $this->get('/aptreneri/users')->assertNotFound();
+    }
+
+    public function test_privileged_trainer_cannot_edit_admin()
+    {
+        $this->actingAsTrainer(['id' => 13]);
+        $admin = $this->createAdmin();
+
+        $this->from('/aptreneri/users')
+            ->get('/aptreneri/users/'.$admin->id.'/edit')
+            ->assertRedirect('/aptreneri/users')
+            ->assertSessionHasErrors('message');
+    }
+
+    public function test_privileged_trainer_cannot_delete_admin()
+    {
+        $this->actingAsTrainer(['id' => 13]);
+        $admin = $this->createAdmin();
+
+        $this->from('/aptreneri/users')
+            ->delete('/aptreneri/users/'.$admin->id)
+            ->assertRedirect('/aptreneri/users')
+            ->assertSessionHasErrors('message');
+
+        $this->assertDatabaseHas('users', ['id' => $admin->id]);
+    }
+
+    public function test_users_data_renders_qrcode_from_token()
+    {
+        $this->actingAsTrainer(['id' => 13]);
+        $member = $this->createMember();
+
+        $response = $this->withAjax()->get('/aptreneri/usersData');
+
+        $response->assertOk();
+        $body = $this->jsonBody($response);
+        $this->assertNotEmpty($body['data']);
+        $this->assertStringContainsString('data:image/png;base64', $body['data'][0]['qrcode']);
+        $this->assertTrue(collect($body['data'])->contains(function ($row) use ($member) {
+            return $row['email'] === $member->email;
+        }));
+    }
 }

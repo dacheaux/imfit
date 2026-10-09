@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Account;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
-use phpDocumentor\Reflection\DocBlock\Tag;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,7 +16,7 @@ use App\Http\Requests;
 
 class UsersController extends Controller
 {
-    protected $users, $qcode, $account;
+    protected $users, $qcode, $account, $area;
 
     public function __construct(User $users,  \App\Qrcode $qcode, Account $account)
     {
@@ -29,26 +25,33 @@ class UsersController extends Controller
         $this->account = $account;
 
         parent::__construct();
+
+        $this->middleware(function ($request, $next) {
+            $this->area = Str::before((string) $request->route()->getName(), '.');
+            view()->share('area', $this->area);
+
+            return $next($request);
+        });
     }
 
     public function index()
     {
-        return view('admin.users.index');
+        $this->abortUnlessPrivilegedTrainer();
+
+        return view('users.index');
     }
 
     public function usersData()
     {
-         //$users = $this->users->get();
-
-        return DataTables::of(User::query())
+        return DataTables::of(User::query()->with('qrcode'))
             ->addColumn('qrcode', function($users) {
-                return view('admin.users.qrcode', compact('users'))->render();
+                return view('users.qrcode', compact('users'))->render();
             })
             ->addColumn('action', function($users) {
-                return view('admin.users.action', compact('users'))->render();
+                return view('users.action', compact('users'))->render();
             })
             ->addColumn('action1', function($users) {
-                return view('admin.users.action1', compact('users'))->render();
+                return view('users.action1', compact('users'))->render();
             })
             ->rawColumns(['qrcode','action', 'action1'])
             ->make(true);
@@ -56,13 +59,17 @@ class UsersController extends Controller
 
     public function profile(User $user)
     {
-        return view('admin.users.profile', compact('user'));
+        return view('users.profile', compact('user'));
     }
 
     public function update(UpdateUserRequest $request, $id)
     {
 
         $user = User::findOrFail($id);
+
+        if ($this->isTrainerArea() && $user->hasRole('admin')){
+            return redirect()->back()->withErrors(['message' => 'Ne možete da izmenite admina.']);
+        }
 
         if($request->hasFile('avatar')){
 
@@ -86,14 +93,18 @@ class UsersController extends Controller
 
         flash()->success(trans('flash.success'),trans('flash.users.supdated'));
 
-        return redirect(route('admin.users.index') );
+        return redirect(route($this->area.'.users.index') );
     }
 
     public function create(User $user)
     {
-        $roles = Role::all();//Get all roles
+        $this->abortUnlessPrivilegedTrainer();
 
-        return view('admin.users.form', compact('user', 'roles'));
+        $roles = $this->isTrainerArea()
+            ? Role::where('name', 'vežbač')->get()
+            : Role::all();
+
+        return view('users.form', compact('user', 'roles'));
     }
 
     public function store(Requests\StoreUserRequest $request)
@@ -139,19 +150,25 @@ class UsersController extends Controller
         if($notify){
             flash()->overlay(trans('flash.success'),trans('flash.users.screated'));
 
-            return redirect(route('admin.users.index'));
+            return redirect(route($this->area.'.users.index'));
         }
 
-        return redirect(route('admin.users.index'));
+        return redirect(route($this->area.'.users.index'));
 
     }
 
     public function edit($id)
     {
+        $this->abortUnlessPrivilegedTrainer();
+
         $roles = Role::all();//Get all roles
         $user = $this->users->with('qrcode')->findOrFail($id);
 
-        return view('admin.users.form', compact('user', 'roles'));
+        if ($this->isTrainerArea() && ($user->hasRole('admin') || $user->hasRole('trener') && \auth()->user()->id !== $user->id )){
+            return redirect()->back()->withErrors(['message' => 'Ne možete da izmenite admina/trenera.']);
+        }
+
+        return view('users.form', compact('user', 'roles'));
     }
 
     public function storeQrcode($id)
@@ -161,26 +178,32 @@ class UsersController extends Controller
         if ($user->qrcode) {
             flash()->overlay(trans('flash.info'), trans('flash.users.qrexists'));
 
-            return redirect()->route('admin.users.edit', $user->id);
+            return redirect()->route($this->area.'.users.edit', $user->id);
         }
 
         $this->createQrCodeFor($user);
 
         flash()->overlay(trans('flash.success'), trans('flash.users.sqrcreated'));
 
-        return redirect()->route('admin.users.edit', $user->id);
+        return redirect()->route($this->area.'.users.edit', $user->id);
     }
 
 
     public function destroy(Requests\DeleteUserRequest $request, $id)
     {
+        $this->abortUnlessPrivilegedTrainer();
+
         $user = $this->users->findOrFail($id);
+
+        if ($this->isTrainerArea() && ($user->hasRole('admin') || $user->hasRole('trener'))){
+            return redirect()->back()->withErrors(['message' => 'Ne možete da obrišete admina/trenera.']);
+        }
 
         $user->delete();
 
         flash()->overlay(trans('flash.success'),trans('flash.users.sdeleted'));
 
-        return redirect(route('admin.users.index'));
+        return redirect(route($this->area.'.users.index'));
     }
 
 
@@ -241,5 +264,17 @@ class UsersController extends Controller
             \File::delete(public_path() . $user->avatar);
         }
         $user->avatar = '/uploads/avatars/' . $filename;
+    }
+
+    protected function isTrainerArea()
+    {
+        return $this->area === 'aptreneri';
+    }
+
+    protected function abortUnlessPrivilegedTrainer()
+    {
+        if ($this->isTrainerArea() && auth()->id() !== 13) {
+            abort(404);
+        }
     }
 }

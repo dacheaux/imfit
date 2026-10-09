@@ -75,12 +75,13 @@ Route::group(['prefix' => 'aptreneri', 'middleware' => ['role:trener', 'auth'], 
     // Terms
     Route::resource('terms', 'Aptreneri\TermsController',  ['only' => ['index', 'show']]);
 
-    Route::resource('users', 'Aptreneri\UsersController', ['except' => ['show']]);
+    Route::resource('users', 'Admin\UsersController', ['except' => ['show']]);
+    Route::post('users/{id}/qrcode', ['as' => 'users.qrcode.store', 'uses' => 'Admin\UsersController@storeQrcode']);
 
     // Ajax Data Terms
     Route::get('dataTerms' ,['as' => 'terms.data', 'uses' => 'Aptreneri\TermsController@dataTerms']);
     Route::get('entryData',['as' => 'entrances.data', 'uses' => 'Aptreneri\EntryController@entryData']);
-    Route::get('usersData',['as' => 'users.data', 'uses' => 'Aptreneri\UsersController@usersData']);
+    Route::get('usersData',['as' => 'users.data', 'uses' => 'Admin\UsersController@usersData']);
 });
 
 // Admin Panel

@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends($area.'.layout')
 
 @section('title')
     {{ trans('admin_message.profile') }}

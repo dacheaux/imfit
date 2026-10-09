@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends($area.'.layout')
 
 @section('title')
     {{ trans('admin_message.sidebar.users') }}
@@ -23,8 +23,8 @@
                     'id' => 'user-form',
                     'method' => $user->exists ? 'put' : 'post',
                     'route'  => $user->exists ?
-                     ['admin.users.update', $user->id]:
-                     ['admin.users.store']
+                     [$area.'.users.update', $user->id]:
+                     [$area.'.users.store']
                 ]) !!}
                 <div class="col-md-6">
                     @if($logedUser->id != $user->id)
@@ -93,7 +93,7 @@
 
                 <div class="pull-right">
                    {!! Form::submit($user->exists ? trans('admin_message.users.save') : trans('admin_message.users.create'), ['class' => 'btn btn-primary btn-flat']) !!}
-                    <a href="{!! url('admin/users') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
+                    <a href="{!! url($area.'/users') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
                     {!! Form::close() !!}
                 </div>
                 <div class="clearfix"></div>
@@ -115,7 +115,7 @@
                     <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(300)->generate($user->qrcode->token)) !!} ">
                     @else
                     <p>Korisnik nema QR kod.</p>
-                    {{ Form::open(['route' => ['admin.users.qrcode.store', $user->id], 'method' => 'POST']) }}
+                    {{ Form::open(['route' => [$area.'.users.qrcode.store', $user->id], 'method' => 'POST']) }}
                         <button type="submit" class="btn btn-primary btn-flat">Kreiraj QR kod</button>
                     {!! Form::close() !!}
                     @endif

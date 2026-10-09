@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends($area.'.layout')
 
 @section('title')
     {{ trans('admin_message.sidebar.users') }}
@@ -14,7 +14,7 @@
 
     <div class="box box-primary">
         <div class="box-header">
-            <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-flat">
+            <a href="{{ route($area.'.users.create') }}" class="btn btn-primary btn-flat">
                 <i class="fa fa-user-plus"></i> &nbsp;&nbsp;
                 {{ trans('admin_message.users.create_user') }}
             </a>
@@ -70,7 +70,7 @@
                         }
                     }
                 ],
-                ajax: '{!! route('admin.users.data') !!}',
+                ajax: '{!! route($area.'.users.data') !!}',
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'qrcode', name: 'qrcode', orderable: false, searchable: false},
