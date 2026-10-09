@@ -8,7 +8,7 @@ The server layout in `/home/imfitrs` is:
 
 - `fitapp/`: the Laravel app, with `.env`, `vendor/` and `storage/`
 - `public_html/`: the cPanel document root. Apache and `php artisan serve` serve this folder. `bootstrap/app.php` remaps `public_path()` here when the sibling folder exists, so uploads and `asset()` URLs resolve in `public_html`, not in `fitapp/public`.
-- `fitapp/public/`: Laravel fallback stubs only (`index.php`, `robots.txt`, `no-image` placeholders). It is not the live web root.
+- `fitapp/public/`: git-only Laravel fallback stubs (`index.php`, `robots.txt`, `uploads/products/no-image.jpg`). Not the live web root, and not in the release zip.
 
 Releases are zips built from a git commit with Git's zip writer (not Windows tar). A zip contains only the app code plus production `vendor/`: `app`, `bootstrap/app.php`, `bootstrap/cache/.gitignore`, `config`, `database`, `resources`, `routes`, `vendor`, `artisan`, `composer.json`, `composer.lock`, and `RELEASE.txt`. It never contains `.env`, `public/`, `public_html/`, or `storage/` contents.
 
@@ -28,11 +28,11 @@ Locally, from `fitapp/`, run `php artisan serve`. It uses the same `public_html`
    powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1
    ```
 
-   This writes `dist/release-<date>-<commit>.zip`. Use `-Ref <tag or commit>` to build an older commit.
+   The script refuses a dirty tree, so commit or stash first. This writes `dist/release-<date>-<commit>.zip`. Use `-Ref <tag or commit>` to build an older commit.
 2. Back up first: export the database in phpMyAdmin, and compress `fitapp/` in File Manager (or keep the previous release zip).
 3. In File Manager, delete `fitapp/vendor` and every `.php` file in `fitapp/bootstrap/cache`. Extracting does not delete files, so old vendor files would otherwise be mixed with the new ones.
 4. Upload the zip **into `/home/imfitrs/fitapp`**, then Extract it there and overwrite.
-5. Open `https://<domain>/_deploy/<DEPLOY_TOKEN>`. It runs `optimize:clear`, `storage:link` (if missing), `config:cache` and `view:cache`, and prints the output. The last line must be `Deploy finished OK.`
+5. Open `https://<domain>/_deploy/<DEPLOY_TOKEN>`. It runs `optimize:clear`, `storage:link` (if missing), `config:cache` and `view:cache`, and prints the output. The last line must be `Deploy finished OK.` The URL allows 3 hits per minute; a 429 means wait a minute and retry once. Do not run `php artisan migrate`: there are no migration files, and the zip includes `database/schema/mysql-schema.dump`, which migrate can load and wipe tables if the migrations table is empty.
 6. `fitapp/RELEASE.txt` shows which commit is deployed.
 
 After changing `fitapp/.env`, open the deploy URL again, because the config is cached.
@@ -50,7 +50,7 @@ Keep live files in `public_html`. Do not merge user uploads into `fitapp/`.
 | --- | --- |
 | Avatars, shop, blog, gallery, TinyMCE, QR codes | **`public_html` only** (`uploads/`, `gallery/photos/`, `upload-posts/`, `images/`) |
 | Theme CSS/JS/images, admin assets | **`public_html` only** (`assets/`, `assets-admin/`, `img/`) |
-| Placeholders (`uploads/no-image.jpg`, `uploads/products/no-image.jpg`) | git `fitapp/public` and `public_html` |
+| Placeholder (`uploads/products/no-image.jpg`) | **`public_html` only** on the server. A copy is in git `fitapp/public` for local fallback; release zips do not ship it. To change it, upload into `public_html` by hand. |
 | cPanel leftovers (`.htaccess`, `cgi-bin/`, `error_log`) | `public_html` only |
 
 Theme and user-generated files live only in `public_html`. Those trees under `fitapp/public` are gitignored. Do not copy `public_html/images`, `public_html/uploads`, or theme folders into git. Deploys do not overwrite `public_html`, so those files persist across releases. Feature tests do not upload files; FakeQrCode avoids writing QR PNGs into live `images/`.
