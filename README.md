@@ -14,7 +14,7 @@ Releases are zips built from a git commit with Git's zip writer (not Windows tar
 
 ### One-time setup
 
-1. In cPanel MultiPHP Manager, set the domain to PHP 8.2 or newer.
+1. In cPanel MultiPHP Manager, set the domain to PHP 8.3 or newer.
 2. In `fitapp/.env`, set `DEPLOY_TOKEN` to a long random string. Keep it secret: anyone with it can rebuild caches.
 3. Copy `scripts/cpanel-index.php` over `/home/imfitrs/public_html/index.php` so Apache boots `../fitapp`. Repeat this copy only if that file changes. `public_path()` is set in `fitapp/bootstrap/app.php`.
 
@@ -22,7 +22,7 @@ Locally, from `fitapp/`, run `php artisan serve`. It uses the same `public_html`
 
 ### Every release
 
-1. Commit everything, then build the zip on a dev machine with PHP 8.2+ and composer:
+1. Commit everything, then build the zip on a dev machine with PHP 8.3+ and composer:
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1
