@@ -20,21 +20,15 @@
                 <h3>{{$tags->exists ? trans('admin_message.tags.edit_workout') .' '.$tags->name : trans('admin_message.tags.create_workout')}}</h3>
             </div>
             <div class="box-body">
-                {!! Form::model($tags, [
-                    'files' => true,
-                    'method' => $tags->exists ? 'put' : 'post',
-                    'route'  => $tags->exists ?
-                     ['admin.tags.update', $tags->id]:
-                     ['admin.tags.store']
-                ]) !!}
+                {!! html()->modelForm($tags, $tags->exists ? 'put' : 'post', ($tags->exists ? route('admin.tags.update', $tags->id) : route('admin.tags.store')))->acceptsFiles()->open() !!}
                 <div class="form-group">
-                    {!! Form::label('name', trans('admin_message.tags.name')) !!}
-                    {!! Form::text('name', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.tags.name'), 'name') !!}
+                    {!! html()->text('name')->attributes(['class' => 'form-control']) !!}
                 </div>
 
-                {!! Form::submit($tags->exists ? trans('admin_message.tags.save_workout') : trans('admin_message.tags.create_workout'), ['class' => 'btn btn-primary btn-flat']) !!}
+                {!! html()->submit($tags->exists ? trans('admin_message.tags.save_workout') : trans('admin_message.tags.create_workout'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                 <a href="{!! url('admin/tags') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-               {!! Form::close() !!}
+               {!! html()->closeModelForm() !!}
             </div>
         </div>
     </div>

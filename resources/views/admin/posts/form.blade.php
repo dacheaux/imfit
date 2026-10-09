@@ -20,55 +20,49 @@
             <h3>{{$post->exists ? trans('admin_message.posts.edit_post') .' '.$post->post_title : trans('admin_message.posts.create_post')}}</h3>
         </div>
         <div class="box-body">
-            {!! Form::model($post, [
-                'files' => true,
-                'method' => $post->exists ? 'put' : 'post',
-                'route'  => $post->exists ?
-                 ['admin.posts.update', $post->id]:
-                 ['admin.posts.store']
-            ]) !!}
+            {!! html()->modelForm($post, $post->exists ? 'put' : 'post', ($post->exists ? route('admin.posts.update', $post->id) : route('admin.posts.store')))->acceptsFiles()->open() !!}
 
             <div class="form-group">
-                {!! Form::label('post_title', trans('admin_message.posts.post_title')) !!}
-                {!! Form::text('post_title', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.posts.post_title'), 'post_title') !!}
+                {!! html()->text('post_title')->attributes(['class' => 'form-control']) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('slug', trans('admin_message.posts.slug')) !!}
-                {!! Form::text('slug', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.posts.slug'), 'slug') !!}
+                {!! html()->text('slug')->attributes(['class' => 'form-control']) !!}
             </div>
 
              <div class="form-group">
-                {!! Form::label('post_desc', trans('admin_message.posts.post_desc')) !!}
-                {!! Form::text('post_desc', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.posts.post_desc'), 'post_desc') !!}
+                {!! html()->text('post_desc')->attributes(['class' => 'form-control']) !!}
             </div>
 
             <div class="form-group">
-                 {!! Form::label('post_image', trans('admin_message.posts.post_image')) !!}
-                 {!! Form::file('post_image', ['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
+                 {!! html()->label(trans('admin_message.posts.post_image'), 'post_image') !!}
+                 {!! html()->file('post_image')->attributes(['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
             </div>
 
              <div class="form-group">
-                {!! Form::label('post_body', trans('admin_message.posts.post_body')) !!}
-                {!! Form::textarea('post_body', null,['class' => 'form-control tinymce']) !!}
+                {!! html()->label(trans('admin_message.posts.post_body'), 'post_body') !!}
+                {!! html()->textarea('post_body')->attributes(['class' => 'form-control tinymce']) !!}
              </div>
 
             <div class="form-group">
-                {!! Form::label('posts_tags', trans('admin_message.posts.tags')) !!}
-                {{--{!! Form::text('posts_tags', $post->exists ? implode(',', $post->tagNames())  : null,['class' => 'form-control', 'id' =>'postsTags', 'data-role' => 'tagsinput']) !!}--}}
-                {!! Form::text('posts_tags', 'test',['class' => 'form-control', 'id' =>'postsTags', 'data-role' => 'tagsinput']) !!}
+                {!! html()->label(trans('admin_message.posts.tags'), 'posts_tags') !!}
+                {{--{!! html()->text('posts_tags', $post->exists ? implode(',', $post->tagNames())  : null)->attributes(['class' => 'form-control', 'id' => 'postsTags', 'data-role' => 'tagsinput']) !!}--}}
+                {!! html()->text('posts_tags', 'test')->attributes(['class' => 'form-control', 'id' => 'postsTags', 'data-role' => 'tagsinput']) !!}
             </div>
 
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('active') !!}
+                    {!! html()->checkbox('active', null, 1)->forgetAttribute('id') !!}
                     <b>{!! trans('admin_message.posts.publish') !!}</b>
                 </label>
             </div>
 
-            {!! Form::submit($post->exists ? trans('admin_message.posts.save_post') : trans('admin_message.posts.create_post'), ['class' => 'btn btn-primary btn-flat']) !!}
+            {!! html()->submit($post->exists ? trans('admin_message.posts.save_post') : trans('admin_message.posts.create_post'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
             <a href="{!! url('admin/posts') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-           {!! Form::close() !!}
+           {!! html()->closeModelForm() !!}
         </div>
     </div>
 @endsection

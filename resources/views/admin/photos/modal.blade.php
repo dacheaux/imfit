@@ -7,38 +7,32 @@
         <h4 class="modal-title">{{trans('admin_message.photos.add')}}</h4>
       </div>
       <div class="modal-body">
-            {!! Form::open([
-                'method' => 'post',
-                'route'  =>
-                 'admin.photos.store',
-                 'files' => true,
-                 'id' => 'photo-form-add'
-            ]) !!}
+            {!! html()->form('POST', route('admin.photos.store'))->acceptsFiles()->attributes(['id' => 'photo-form-add'])->open() !!}
 
-            {!! Form::hidden('photoId', 1,['id' =>'photoId']) !!}
-            {!! Form::hidden('idphoto', null,['id' =>'idphoto']) !!}
+            {!! html()->hidden('photoId', 1)->attributes(['id' => 'photoId']) !!}
+            {!! html()->hidden('idphoto')->attributes(['id' => 'idphoto']) !!}
 
             <div class="form-group">
-                {!! Form::label('title', trans('admin_message.photos.title')) !!}
-                {!! Form::text('title', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.photos.title'), 'title') !!}
+                {!! html()->text('title')->attributes(['class' => 'form-control']) !!}
             </div>
 
            <div class="form-group">
-                {!! Form::label('description', trans('admin_message.photos.description')) !!}
-                {!! Form::text('description', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.photos.description'), 'description') !!}
+                {!! html()->text('description')->attributes(['class' => 'form-control']) !!}
             </div>
 
               <div class="form-group">
-                {!! Form::label('path', trans('admin_message.photos.image')) !!}
-                {!! Form::file('path', ['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
+                {!! html()->label(trans('admin_message.photos.image'), 'path') !!}
+                {!! html()->file('path')->attributes(['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
                 <div id="path-messagge"></div>
               </div>
             <hr>
 
-            {!! Form::submit(trans('admin_message.photos.save'), ['class' => 'btn btn-primary btn-flat',  'id' => 'photo-add']) !!}
+            {!! html()->submit(trans('admin_message.photos.save'))->attributes(['class' => 'btn btn-primary btn-flat', 'id' => 'photo-add']) !!}
             {{--<button type="button" class="btn btn-primary btn-flat" id="photo-add">{{ trans('admin_message.photos.create') }}</button>--}}
             <button type="button" class="btn btn-danger btn-flat" data-dismiss="modal">{{ trans('admin_message.photos.close') }}</button>
-            {!! Form::close() !!}
+            {!! html()->form()->close() !!}
       </div>
 
     </div>

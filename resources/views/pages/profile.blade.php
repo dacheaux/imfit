@@ -18,74 +18,69 @@
 
                 <div class="container bootstrap snippet">
 
-                    {!! Form::model($user, [
-                                  'files'=>true,
-                                  'id' => 'user-form',
-                                  'method' =>'put' ,
-                                   'route' => [ 'profil.update', $user->id ]
-                              ]) !!}
+                    {!! html()->modelForm($user, 'PUT', route('profil.update', $user->id))->acceptsFiles()->attributes(['id' => 'user-form'])->open() !!}
 
                     <div class="row justify-content-md-center">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                {!! Form::label('avatar', trans('admin_message.users.avatar')) !!}:
+                                {!! html()->label(trans('admin_message.users.avatar'), 'avatar') !!}:
                                 <img src="{{ $user->avatar }}" class="avatar img-circle img-thumbnail" alt="avatar">
                             </div>
                             <hr>
                             <div class="form-group">
-                                {!! Form::label('note',trans('admin_message.users.note')) !!}:
+                                {!! html()->label(trans('admin_message.users.note'), 'note') !!}:
                                 <p>{{ $user->note }}</p>
                             </div>
                         </div>
                         <div class="col-sm-6">
 
                             <div class="form-group">
-                                {!! Form::label('email',trans('admin_message.users.email').'*') !!}
+                                {!! html()->label(trans('admin_message.users.email').'*', 'email') !!}
                                 <div class="ff_contact_input">
-                                {!! Form::text('email', old('email'),['class' => 'form-control', $user->exists ? 'readonly' : '']) !!}
+                                {!! html()->text('email', old('email'))->attributes(['class' => 'form-control'])->attributeIf($user->exists, 'readonly') !!}
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('name', trans('admin_message.users.name').'*') !!}
-                                {!! Form::text('name', old('name'),['class' => 'form-control']) !!}
+                                {!! html()->label(trans('admin_message.users.name').'*', 'name') !!}
+                                {!! html()->text('name', old('name'))->attributes(['class' => 'form-control']) !!}
                             </div>
 
                             <div class="form-group">
-                                {!! Form::label('lastname', trans('admin_message.users.lastname').'*') !!}
-                                {!! Form::text('lastname', old('lastname'),['class' => 'form-control']) !!}
+                                {!! html()->label(trans('admin_message.users.lastname').'*', 'lastname') !!}
+                                {!! html()->text('lastname', old('lastname'))->attributes(['class' => 'form-control']) !!}
                             </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('phone', trans('admin_message.users.phone')) !!}:
-                                    {!! Form::text('phone', old('phone'),['class' => 'form-control']) !!}
+                                    {!! html()->label(trans('admin_message.users.phone'), 'phone') !!}:
+                                    {!! html()->text('phone', old('phone'))->attributes(['class' => 'form-control']) !!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('birth', trans('admin_message.users.birth')) !!}:
-                                    {!! Form::date('birth', $user->exists ?  \Carbon\Carbon::parse($user->birth):  \Carbon\Carbon::now(),['class' => 'form-control']) !!}
+                                    {!! html()->label(trans('admin_message.users.birth'), 'birth') !!}:
+                                    {!! html()->date('birth', $user->exists ?  \Carbon\Carbon::parse($user->birth):  \Carbon\Carbon::now())->attributes(['class' => 'form-control']) !!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('password',trans('admin_message.users.password')) !!}
-                                    {!! Form::password('password',['class' => 'form-control']) !!}
+                                    {!! html()->label(trans('admin_message.users.password'), 'password') !!}
+                                    {!! html()->password('password')->attributes(['class' => 'form-control']) !!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('password_confirmation', trans('admin_message.users.password_confirmation')) !!}
-                                    {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
+                                    {!! html()->label(trans('admin_message.users.password_confirmation'), 'password_confirmation') !!}
+                                    {!! html()->password('password_confirmation')->attributes(['class' => 'form-control']) !!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!! Form::label('avatar', trans('admin_message.users.avatar')) !!}:
-                                    {!! Form::file('avatar', ['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
+                                    {!! html()->label(trans('admin_message.users.avatar'), 'avatar') !!}:
+                                    {!! html()->file('avatar')->attributes(['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
                                 </div>
 
 
 
                                 <div class="form-group">
                                     <div class="col-xs-12">
-                                        {!! Form::submit($user->exists ? trans('admin_message.users.save') : trans('admin_message.users.create'), ['class' => 'ff_button pull-right']) !!}
+                                        {!! html()->submit($user->exists ? trans('admin_message.users.save') : trans('admin_message.users.create'))->attributes(['class' => 'ff_button pull-right']) !!}
                                     </div>
                                 </div>
 
@@ -99,7 +94,7 @@
 
                 </div><!--/row-->
 
-                {!! Form::close() !!}
+                {!! html()->closeModelForm() !!}
 
             </div>
         </div>

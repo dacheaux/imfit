@@ -21,19 +21,13 @@
             </div>
 
             <div class="box-body">
-                {!! Form::model($termpattern, [
-                                   'id' => 'termpatterns-form',
-                                   'method' => $termpattern->exists ? 'put' : 'post',
-                                   'route'  => $termpattern->exists ?
-                                    ['admin.termpatterns.update', $termpattern->id]:
-                                    ['admin.termpatterns.store']
-                               ]) !!}
+                {!! html()->modelForm($termpattern, $termpattern->exists ? 'put' : 'post', ($termpattern->exists ? route('admin.termpatterns.update', $termpattern->id) : route('admin.termpatterns.store')))->attributes(['id' => 'termpatterns-form'])->open() !!}
 
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class='input-group '>
-                            {!! Form::label('name', trans('admin_message.termpatterns.name')) !!}
-                            {!! Form::text('name', $termpattern->exists ? $termpattern->name : '', ['class' => 'form-control']) !!}
+                            {!! html()->label(trans('admin_message.termpatterns.name'), 'name') !!}
+                            {!! html()->text('name', $termpattern->exists ? $termpattern->name : '')->attributes(['class' => 'form-control']) !!}
                         </div>
                     </div>
 
@@ -88,24 +82,24 @@
 
                     <div class="form-group">
                         <div class='input-group '>
-                            {!! Form::label('slots', trans('admin_message.termpatterns.slot')) !!}
-                            {!! Form::number('slots', $termpattern->exists ? $termpattern->slots : '', ['class' => 'form-control', 'min' => 0]) !!}
+                            {!! html()->label(trans('admin_message.termpatterns.slot'), 'slots') !!}
+                            {!! html()->number('slots', $termpattern->exists ? $termpattern->slots : '')->attributes(['class' => 'form-control', 'min' => 0]) !!}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class='input-group '>
-                            {!! Form::label('note', trans('admin_message.termpatterns.note')) !!}
-                            {!! Form::textarea('note', $termpattern->exists ? $termpattern->note : '', ['class' => 'form-control']) !!}
+                            {!! html()->label(trans('admin_message.termpatterns.note'), 'note') !!}
+                            {!! html()->textarea('note', $termpattern->exists ? $termpattern->note : '')->attributes(['class' => 'form-control']) !!}
                         </div>
                     </div>
 
                     <div class="form-group pull-right">
-                        {!! Form::submit($termpattern->exists ? trans('admin_message.users.save') : trans('admin_message.termpatterns.create'), ['class' => 'btn btn-primary btn-flat', 'id' => 'save']) !!}
+                        {!! html()->submit($termpattern->exists ? trans('admin_message.users.save') : trans('admin_message.termpatterns.create'))->attributes(['class' => 'btn btn-primary btn-flat', 'id' => 'save']) !!}
                         <a href="{!! url('admin/termpatterns') !!}" title="{{ trans('admin_message.cancel') }}"
                            class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
                     </div>
 
-                    {!! Form::close() !!}
+                    {!! html()->closeModelForm() !!}
                 </div>
             </div>
         </div>

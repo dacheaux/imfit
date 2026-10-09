@@ -20,13 +20,7 @@
                 <h3>{{$plans->exists ? trans('admin_message.plans.edit_workout') .' '.$plans->name : trans('admin_message.plans.create_plan')}}</h3>
             </div>
             <div class="box-body">
-                {!! Form::model($plans, [
-                    'files' => true,
-                    'method' => $plans->exists ? 'put' : 'post',
-                    'route'  => $plans->exists ?
-                     ['admin.plans.update', $plans->id]:
-                     ['admin.plans.store']
-                ]) !!}
+                {!! html()->modelForm($plans, $plans->exists ? 'put' : 'post', ($plans->exists ? route('admin.plans.update', $plans->id) : route('admin.plans.store')))->acceptsFiles()->open() !!}
 
                 <div class="form-group">
                     <label for="workout_id">{{ trans('admin_message.plans.workout_id') }}:</label>
@@ -39,29 +33,29 @@
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('name', trans('admin_message.plans.name')) !!}
-                    {!! Form::text('name', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.plans.name'), 'name') !!}
+                    {!! html()->text('name')->attributes(['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('workouts_number', trans('admin_message.plans.wokrouts_number')) !!}
-                    {!! Form::number('workouts_number', null,['class' => 'form-control', 'min' => 1]) !!}
+                    {!! html()->label(trans('admin_message.plans.wokrouts_number'), 'workouts_number') !!}
+                    {!! html()->number('workouts_number')->attributes(['class' => 'form-control', 'min' => 1]) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('plan_duration', trans('admin_message.plans.plan_duration')) !!}
-                    {!! Form::number('plan_duration', null,['class' => 'form-control', 'min' => 0]) !!}
+                    {!! html()->label(trans('admin_message.plans.plan_duration'), 'plan_duration') !!}
+                    {!! html()->number('plan_duration')->attributes(['class' => 'form-control', 'min' => 0]) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('price', trans('admin_message.plans.price')) !!}
-                    {!! Form::text('price', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.plans.price'), 'price') !!}
+                    {!! html()->text('price')->attributes(['class' => 'form-control']) !!}
                 </div>
 
 
-                {!! Form::submit($plans->exists ? trans('admin_message.plans.save_workout') : trans('admin_message.plans.create_plan'), ['class' => 'btn btn-primary btn-flat']) !!}
+                {!! html()->submit($plans->exists ? trans('admin_message.plans.save_workout') : trans('admin_message.plans.create_plan'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                 <a href="{!! url('admin/plans') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-               {!! Form::close() !!}
+               {!! html()->closeModelForm() !!}
             </div>
         </div>
     </div>

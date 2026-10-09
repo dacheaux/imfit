@@ -9,9 +9,9 @@
 		<div id="upload_form">
 			<p>
 				<!-- Change the url here to reflect your image handling controller -->
-				{!! Form::open(array('route' => 'image.upload', 'method' => 'POST', 'files' => true, 'target' => 'upload_target')) !!}
-				{!! Form::file('imagefile', array('onChange' => 'this.form.submit(); ImageUpload.inProgress();')) !!}
-				{!! Form::close() !!}
+				{!! html()->form('POST', route('image.upload'))->acceptsFiles()->attributes(['target' => 'upload_target'])->open() !!}
+				{!! html()->file('imagefile')->attributes(['onChange' => 'this.form.submit(); ImageUpload.inProgress();']) !!}
+				{!! html()->form()->close() !!}
 			</p>
 		</div>
 		<div id="image_preview" style="display:none;">

@@ -1,6 +1,6 @@
 <div class="ff_sidebar_wrapper">
     <div class="widget widget_categories">
-        {{ Form::open(['method' => 'GET']) }}
+        {{ html()->form('GET')->open() }}
 
         <div class="form-group">
             <div class="col-md-4">
@@ -23,6 +23,6 @@
             </div>
         </div>
 
-        {{ Form::close() }}
+        {{ html()->form()->close() }}
     </div>
 </div>

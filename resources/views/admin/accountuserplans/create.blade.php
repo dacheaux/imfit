@@ -36,12 +36,7 @@
             </div>
             <div class="box-body">
 
-                {!! Form::model($accountuserplans, [
-                    'method' => $accountuserplans->exists ? 'put' : 'post',
-                    'route'  => $accountuserplans->exists ?
-                     ['admin.accountuserplans.update', $accountuserplans->id]:
-                     ['admin.accountuserplans.store']
-                ]) !!}
+                {!! html()->modelForm($accountuserplans, $accountuserplans->exists ? 'put' : 'post', ($accountuserplans->exists ? route('admin.accountuserplans.update', $accountuserplans->id) : route('admin.accountuserplans.store')))->open() !!}
 
                 <div class="form-group">
                     <label for="account_plan_id">{{ trans('admin_message.accountuserplans.plan_name') }}:</label>
@@ -65,9 +60,9 @@
                     </select>
                 </div>
 
-                {!! Form::submit($accountuserplans->exists ? trans('admin_message.accountuserplans.save') : trans('admin_message.accountuserplans.create'), ['class' => 'btn btn-primary btn-flat']) !!}
+                {!! html()->submit($accountuserplans->exists ? trans('admin_message.accountuserplans.save') : trans('admin_message.accountuserplans.create'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                     <a href="{!! url('admin/accountuserplans') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-                {!! Form::close() !!}
+                {!! html()->closeModelForm() !!}
 
             </div>
         </div>

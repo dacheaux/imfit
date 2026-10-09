@@ -43,10 +43,10 @@
 
                 <hr>
 
-                {!! Form::open(['route' => ['admin.categories.save-nested-categories'], 'method' => 'POST']) !!}
+                {!! html()->form('POST', route('admin.categories.save-nested-categories'))->open() !!}
                     <textarea style="display: none;" name="nested_category_array" id="nestable-output"></textarea>
                     <button type="submit" class="btn btn-success" style="margin-top: 15px;" >Sačuvaj izmene</button>
-                {!! Form::close() !!}
+                {!! html()->form()->close() !!}
 
 
                 <hr>

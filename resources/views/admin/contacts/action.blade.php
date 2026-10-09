@@ -1,1 +1,1 @@
-{!! Form::checkbox('seen', $contacts->id,  $contacts->seen) !!}
+{!! html()->checkbox('seen', $contacts->seen, $contacts->id)->forgetAttribute('id') !!}

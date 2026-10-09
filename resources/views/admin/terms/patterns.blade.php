@@ -47,7 +47,7 @@
             </div>
 
             <div class="box-body">
-                {!! Form::open(['url'=> 'admin/terms/apply-term-patterns', 'action' => 'POST']) !!}
+                {!! html()->form('POST', url('admin/terms/apply-term-patterns'))->open() !!}
                 <div class="col-md-12">
                     <p>Odabirom šablona, termini će se primeniti na ceo dan <br> izabranog datuma. <i class="fa fa-info-circle"></i> </p>
                     <div class="form-group">
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('start_datetime', trans('admin_message.term.apply_dates')) !!}
+                        {!! html()->label(trans('admin_message.term.apply_dates'), 'start_datetime') !!}
                         <div class="input-group date" id="start_datetime">
                             <input type="text" class="form-control" id="apply_dates_input" readonly
                                    placeholder="{{ trans('admin_message.term.apply_dates') }}" />
@@ -72,12 +72,12 @@
                     </div>
 
                     <div class="form-group pull-right">
-                        {!! Form::submit( trans('admin_message.term.applyTermPatterns'), ['class' => 'btn btn-primary btn-flat']) !!}
+                        {!! html()->submit(trans('admin_message.term.applyTermPatterns'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                         <a href="{!! url('admin/terms') !!}" title="{{ trans('admin_message.cancel') }}"
                            class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
                     </div>
 
-                    {!! Form::close() !!}
+                    {!! html()->form()->close() !!}
 
                 </div>
 

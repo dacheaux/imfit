@@ -56,29 +56,29 @@
             </div>
         </div>
             <div class="row justify-content-md-center">
-                {!! Form::model( $contact = new \App\Contact, ['url'=>'kontakt', 'id'=>'contact-form'] ) !!}
+                {!! html()->modelForm($contact = new \App\Contact, 'POST', url('kontakt'))->attributes(['id' => 'contact-form'])->open() !!}
 
                         <div class="col-md-12">
                             <div class="col-lg-10 col-md-12">
                                 <div class="ff_contact_input">
-                                    {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Ime*']) !!}
+                                    {!! html()->text('name')->attributes(['class' => 'form-control', 'placeholder' => 'Ime*']) !!}
                                 </div>
                             </div>
                             <div class="col-lg-10 col-md-12">
                                 <div class="ff_contact_input">
-                                    {!! Form::text('email', null, ['class' => 'form-control', 'placeholder' => 'Email*', 'data-valid' => 'email', 'data-error'=>'Email should be valid.']) !!}
+                                    {!! html()->text('email')->attributes(['class' => 'form-control', 'placeholder' => 'Email*', 'data-valid' => 'email', 'data-error' => 'Email should be valid.']) !!}
                                 </div>
                             </div>
                         </div>
                          <div class="col-md-12">
                             <div class="col-lg-10 col-md-12">
                                 <div class="ff_contact_input">
-                                    {!! Form::text('theme', null, ['class' => 'form-control', 'placeholder' => 'Naslov*']) !!}
+                                    {!! html()->text('theme')->attributes(['class' => 'form-control', 'placeholder' => 'Naslov*']) !!}
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="ff_contact_input">
-                                       {!! Form::textarea('question', null, ['class' => 'form-control', 'placeholder' => 'Poruka*', 'rows' => 8]) !!}
+                                       {!! html()->textarea('question')->attributes(['class' => 'form-control', 'placeholder' => 'Poruka*', 'rows' => 8]) !!}
                                         <div class="response"></div>
                                         <button type="submit" class="ff_button" >Pošalji</button>
                                 </div>
@@ -90,7 +90,7 @@
                         </div>
 
 
-                {!! Form::close() !!}
+                {!! html()->closeModelForm() !!}
             </div>
     </div>
 </div>

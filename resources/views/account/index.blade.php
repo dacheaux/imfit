@@ -111,7 +111,7 @@
                     <br>
                     <h3>Dopuni svoj račun</h3>
                     <div class="container" style="padding: 0;">
-                        {!! Form::open(['method'=>'post','url'=>'poruci-plan-racun', 'id'=>'paket-form'] ) !!}
+                        {!! html()->form('POST', url('poruci-plan-racun'))->attributes(['id' => 'paket-form'])->open() !!}
                         <div class="col-md-4 offset-lg-4 form-group top_padder20" style="padding-left: 0; padding-right: 0;">
                             <select name="account_plan_id" id="account_plan_id" class="form-control" required>
                                 <option value="">Izaberi plan</option>
@@ -133,7 +133,7 @@
                                                         </li>
                                                     </ul>
                                                     <div class="form-group">
-                                                        {!! Form::submit('Naruči', ['class' => 'ff_button' , 'onclick'=>'return confirm("Da li ste sigurni da želite da poručite: '.$plan->plan_name.'?")']) !!}
+                                                        {!! html()->submit('Naruči')->attributes(['class' => 'ff_button', 'onclick' => 'return confirm("Da li ste sigurni da želite da poručite: '.$plan->plan_name.'?")']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,7 +145,7 @@
                         <div class="pt-2">
                             @include('partials.errors')
                         </div>
-                        {!! Form::close() !!}
+                        {!! html()->form()->close() !!}
                     </div>
                     <p>
                         Ovde možeš da naručiš plan kako bi dopunio svoje stanje na računu.<br class="d-none d-md-block">

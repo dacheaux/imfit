@@ -21,14 +21,7 @@
 
             <div class="box-body">
 
-                {!! Form::model($membership, [
-                    'files'=>true,
-                    'id' => 'membership-form',
-                    'method' => $membership->exists ? 'put' : 'post',
-                    'route'  => $membership->exists ?
-                     ['admin.memberships.update', $membership->id]:
-                     ['admin.memberships.store']
-                ]) !!}
+                {!! html()->modelForm($membership, $membership->exists ? 'put' : 'post', ($membership->exists ? route('admin.memberships.update', $membership->id) : route('admin.memberships.store')))->acceptsFiles()->attributes(['id' => 'membership-form'])->open() !!}
                 <div class="col-md-12">
 
                     @if(!$membership->exists)
@@ -43,19 +36,19 @@
                     @endif
 
                     <div class="form-group">
-                        {!! Form::label('terms_number',trans('admin_message.membership.terms_number').'*') !!}
-                        {!! Form::number('terms_number', null,['class' => 'form-control', 'min' => 0]) !!}
+                        {!! html()->label(trans('admin_message.membership.terms_number').'*', 'terms_number') !!}
+                        {!! html()->number('terms_number')->attributes(['class' => 'form-control', 'min' => 0]) !!}
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('expired_time', trans('admin_message.membership.expired_time')) !!}
-                        {!! Form::date('expired_time', $membership->exists ?  \Carbon\Carbon::parse($membership->expired_time):  \Carbon\Carbon::now(),['class' => 'form-control']) !!}
+                        {!! html()->label(trans('admin_message.membership.expired_time'), 'expired_time') !!}
+                        {!! html()->date('expired_time', $membership->exists ?  \Carbon\Carbon::parse($membership->expired_time):  \Carbon\Carbon::now())->attributes(['class' => 'form-control']) !!}
                     </div>
 
                     <div class="pull-right">
-                       {!! Form::submit($membership->exists ? trans('admin_message.users.save') : trans('admin_message.membership.create'), ['class' => 'btn btn-primary btn-flat']) !!}
+                       {!! html()->submit($membership->exists ? trans('admin_message.users.save') : trans('admin_message.membership.create'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                         <a href="{!! url('admin/memberships') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-                        {!! Form::close() !!}
+                        {!! html()->closeModelForm() !!}
                     </div>
 
                 </div>

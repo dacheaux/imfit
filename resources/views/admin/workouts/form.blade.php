@@ -20,26 +20,20 @@
                 <h3>{{$workouts->exists ? trans('admin_message.workouts.edit_workout') .' '.$workouts->name : trans('admin_message.workouts.create_workout')}}</h3>
             </div>
             <div class="box-body">
-                {!! Form::model($workouts, [
-                    'files' => true,
-                    'method' => $workouts->exists ? 'put' : 'post',
-                    'route'  => $workouts->exists ?
-                     ['admin.workouts.update', $workouts->id]:
-                     ['admin.workouts.store']
-                ]) !!}
+                {!! html()->modelForm($workouts, $workouts->exists ? 'put' : 'post', ($workouts->exists ? route('admin.workouts.update', $workouts->id) : route('admin.workouts.store')))->acceptsFiles()->open() !!}
                 <div class="form-group">
-                    {!! Form::label('name', trans('admin_message.workouts.name')) !!}
-                    {!! Form::text('name', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.workouts.name'), 'name') !!}
+                    {!! html()->text('name')->attributes(['class' => 'form-control']) !!}
                 </div>
                  <div class="form-group">
-                    {!! Form::label('workout_time', trans('admin_message.workouts.workout_time')) !!} <i class="fa fa-clock-o"></i>
-                    {!! Form::text('workout_time', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.workouts.workout_time'), 'workout_time') !!} <i class="fa fa-clock-o"></i>
+                    {!! html()->text('workout_time')->attributes(['class' => 'form-control']) !!}
                 </div>
 
 
-                {!! Form::submit($workouts->exists ? trans('admin_message.workouts.save_workout') : trans('admin_message.workouts.create_workout'), ['class' => 'btn btn-primary btn-flat']) !!}
+                {!! html()->submit($workouts->exists ? trans('admin_message.workouts.save_workout') : trans('admin_message.workouts.create_workout'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                 <a href="{!! url('admin/workouts') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-               {!! Form::close() !!}
+               {!! html()->closeModelForm() !!}
             </div>
         </div>
     </div>

@@ -125,14 +125,14 @@
                                                 @if( $p->approved )
                                                     <div class="form-group">
                                                         @if(!$p->active)
-                                                            {{ Form::open(['url' => 'aktiviraj-paket', 'method' => 'post']) }}
-                                                            {{ Form::hidden('id', $p->id) }}
+                                                            {{ html()->form('POST', url('aktiviraj-paket'))->open() }}
+                                                            {{ html()->hidden('id', $p->id)->forgetAttribute('id') }}
                                                             <button type="submit"
                                                                     onclick="return confirm('Da li ste sigurni?')"
                                                                     class="btn btn-{{ $p->active ? 'success' : 'success'}}" {{ $p->active ? 'disabled':'' }}>
                                                                 {{ $p->active ? 'U TOKU' : 'AKTIVIRAJ'}}
                                                             </button>
-                                                            {{ Form::close() }}
+                                                            {{ html()->form()->close() }}
                                                         @elseif($p->active && $p->expired_time <= \Carbon\Carbon::now())
                                                         @else
                                                             @if(!$p->pause_flag)
@@ -157,14 +157,14 @@
                                                                 {{--</button>--}}
                                                             {{--@endif--}}
                                                             {{--@if( $p->pause_flag == 0 && $p->expired_time >= \Carbon\Carbon::now())--}}
-                                                                {{--{{ Form::open(['url' => 'pauziraj-paket', 'method' => 'post']) }}--}}
-                                                                {{--{{ Form::hidden('id', $p->id) }}--}}
+                                                                {{--{{ html()->form('POST', url('pauziraj-paket'))->open() }}--}}
+                                                                {{--{{ html()->hidden('id', $p->id)->forgetAttribute('id') }}--}}
                                                                 {{--<button type="submit"--}}
                                                                         {{--onclick="return confirm('Da li ste sigurni?')"--}}
                                                                         {{--class="btn btn-{{ $p->pause_flag ? 'info' : 'info'}}" {{ $p->pause_flag ? 'disabled':'' }}>--}}
                                                                     {{--{{ $p->pause_flag ? 'PAUZA U TOKU' : 'PAUZA'}}--}}
                                                                 {{--</button>--}}
-                                                                {{--{{ Form::close() }}--}}
+                                                                {{--{{ html()->form()->close() }}--}}
                                                             {{--@endif--}}
                                                             @if($p->pause_flag == 0)
                                                                 @if( $p->expired_time > \Carbon\Carbon::now())
@@ -228,7 +228,7 @@
                         <br>
                         <h3>Naruči nov paket treninga</h3>
                         <div class="container" style="padding: 0;">
-                            {!! Form::open(['method'=>'post','url'=>'poruci-paket', 'id'=>'paket-form'] ) !!}
+                            {!! html()->form('POST', url('poruci-paket'))->attributes(['id' => 'paket-form'])->open() !!}
                             <div class="col-md-4 form-group top_padder20" style="padding-left: 0; padding-right: 0;">
                                 <label for="plan_id">Paketi:</label>
                                 <select name="plan_id" id="plan_id" class="form-control" required>
@@ -260,7 +260,7 @@
                                                                 <h3>{{ $plan->workouts_number }}</h3></li>
                                                         </ul>
                                                         <div class="form-group">
-                                                            {!! Form::submit('Naruči', ['class' => 'ff_button' , 'onclick'=>'return confirm("Da li ste sigurni da želite da poručite: '.$plan->name.'?")']) !!}
+                                                            {!! html()->submit('Naruči')->attributes(['class' => 'ff_button', 'onclick' => 'return confirm("Da li ste sigurni da želite da poručite: '.$plan->name.'?")']) !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,7 +272,7 @@
                             <div class="pt-2">
                                 @include('partials.errors')
                             </div>
-                            {!! Form::close() !!}
+                            {!! html()->form()->close() !!}
                         </div>
                         <p>
                             Ovde možeš da naručiš nov paket treninga, posle odobrenja od strane administratora, moći ćeš

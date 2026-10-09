@@ -21,21 +21,16 @@
                 <h3>{{$account->exists ? trans('admin_message.account.edit')  : trans('admin_message.account.create')}}</h3>
             </div>
             <div class="box-body">
-                {!! Form::model($account, [
-                    'method' => $account->exists ? 'put' : 'post',
-                    'route'  => $account->exists ?
-                     ['admin.accounts.update', $account->id]:
-                     ['admin.accounts.store']
-                ]) !!}
+                {!! html()->modelForm($account, $account->exists ? 'put' : 'post', ($account->exists ? route('admin.accounts.update', $account->id) : route('admin.accounts.store')))->open() !!}
 
                 <div class="form-group">
-                    {!! Form::label('balance', trans('admin_message.account.balance')) !!}
-                    {!! Form::number('balance', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.account.balance'), 'balance') !!}
+                    {!! html()->number('balance')->attributes(['class' => 'form-control']) !!}
                 </div>
 
-                {!! Form::submit($account->exists ? trans('admin_message.plans.save_workout') : trans('admin_message.plans.create_plan'), ['class' => 'btn btn-primary btn-flat']) !!}
+                {!! html()->submit($account->exists ? trans('admin_message.plans.save_workout') : trans('admin_message.plans.create_plan'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                 <a href="{!! url('admin/accountplans') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-               {!! Form::close() !!}
+               {!! html()->closeModelForm() !!}
             </div>
         </div>
     </div>

@@ -1,1 +1,1 @@
-{!! Form::checkbox('active', $posts->id,  $posts->active) !!}
+{!! html()->checkbox('active', $posts->active, $posts->id)->forgetAttribute('id') !!}

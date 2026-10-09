@@ -19,38 +19,31 @@
             <h3>{{$photo->exists ? trans('admin_message.photos.edit') .' '.$photo->title : trans('admin_message.photos.create')}}</h3>
         </div>
         <div class="box-body">
-               {!! Form::model($photo, [
-                'files' => true,
-                'id' => 'photo-form',
-                'method' => $photo->exists ? 'put' : 'post',
-                'route'  => $photo->exists ?
-                 ['admin.photos.update', $photo->id]:
-                 ['admin.photos.store']
-            ]) !!}
+               {!! html()->modelForm($photo, $photo->exists ? 'put' : 'post', ($photo->exists ? route('admin.photos.update', $photo->id) : route('admin.photos.store')))->acceptsFiles()->attributes(['id' => 'photo-form'])->open() !!}
 
-            {!! Form::hidden('photoId', $photo->photo_id,['id' =>'photoId']) !!}
+            {!! html()->hidden('photoId', $photo->photo_id)->attributes(['id' => 'photoId']) !!}
 
             <div class="form-group">
-                {!! Form::label('title', trans('admin_message.photos.title')) !!}
-                {!! Form::text('title', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.photos.title'), 'title') !!}
+                {!! html()->text('title')->attributes(['class' => 'form-control']) !!}
             </div>
 
            <div class="form-group">
-                {!! Form::label('description', trans('admin_message.photos.description')) !!}
-                {!! Form::text('description', null,['class' => 'form-control']) !!}
+                {!! html()->label(trans('admin_message.photos.description'), 'description') !!}
+                {!! html()->text('description')->attributes(['class' => 'form-control']) !!}
             </div>
 
               <div class="form-group">
-                {!! Form::label('path', trans('admin_message.photos.image')) !!}
-                {!! Form::file('path', ['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
+                {!! html()->label(trans('admin_message.photos.image'), 'path') !!}
+                {!! html()->file('path')->attributes(['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
                 <div id="path-messagge"></div>
               </div>
             <hr>
 
-            {!! Form::submit($photo->exists ? trans('admin_message.photos.save') : trans('admin_message.photos.create'), ['class' => 'btn btn-primary btn-flat']) !!}
+            {!! html()->submit($photo->exists ? trans('admin_message.photos.save') : trans('admin_message.photos.create'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
             <a href="{!! url('admin/photos') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
 
-            {!! Form::close() !!}
+            {!! html()->closeModelForm() !!}
         </div>
     </div>
 @endsection

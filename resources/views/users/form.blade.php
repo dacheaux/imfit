@@ -18,17 +18,10 @@
             </div>
 
             <div class="box-body">
-                {!! Form::model($user, [
-                    'files'=>true,
-                    'id' => 'user-form',
-                    'method' => $user->exists ? 'put' : 'post',
-                    'route'  => $user->exists ?
-                     [$area.'.users.update', $user->id]:
-                     [$area.'.users.store']
-                ]) !!}
+                {!! html()->modelForm($user, $user->exists ? 'put' : 'post', ($user->exists ? route($area.'.users.update', $user->id) : route($area.'.users.store')))->acceptsFiles()->attributes(['id' => 'user-form'])->open() !!}
                 <div class="col-md-6">
                     @if($logedUser->id != $user->id)
-                        {!! Form::label('type',trans('admin_message.users.roles').'*') !!}
+                        {!! html()->label(trans('admin_message.users.roles').'*', 'type') !!}
                          <div class="form-group ">
                              @if(!$roles->isEmpty())
                                 <select name="roles" id="roles" class="form-control" required>
@@ -43,7 +36,7 @@
                     @endif
 
                     <div class="form-group">
-                      {!! Form::label('type',trans('admin_message.users.type').'*') !!}
+                      {!! html()->label(trans('admin_message.users.type').'*', 'type') !!}
                        <select name="type" id="type" class="form-control">
                             <option value="0" {{   $user->exists && 0 == $user->type  ? 'selected' : '' }}>Mesečni</option>
                             <option value="1" {{   $user->exists && 1 == $user->type  ? 'selected' : '' }}>Nedeljni</option>
@@ -51,18 +44,18 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('email',trans('admin_message.users.email').'*') !!}
-                        {!! Form::text('email', null,['class' => 'form-control', $user->exists ? 'readonly' : '']) !!}
+                        {!! html()->label(trans('admin_message.users.email').'*', 'email') !!}
+                        {!! html()->text('email')->attributes(['class' => 'form-control'])->attributeIf($user->exists, 'readonly') !!}
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('name', trans('admin_message.users.name').'*') !!}
-                        {!! Form::text('name', null,['class' => 'form-control']) !!}
+                        {!! html()->label(trans('admin_message.users.name').'*', 'name') !!}
+                        {!! html()->text('name')->attributes(['class' => 'form-control']) !!}
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('lastname', trans('admin_message.users.lastname').'*') !!}
-                        {!! Form::text('lastname', null,['class' => 'form-control']) !!}
+                        {!! html()->label(trans('admin_message.users.lastname').'*', 'lastname') !!}
+                        {!! html()->text('lastname')->attributes(['class' => 'form-control']) !!}
                     </div>
 
                 </div>
@@ -70,31 +63,31 @@
                 <div class="col-md-6">
 
                     <div class="form-group">
-                        {!! Form::label('phone', trans('admin_message.users.phone')) !!}
-                        {!! Form::text('phone', null,['class' => 'form-control']) !!}
+                        {!! html()->label(trans('admin_message.users.phone'), 'phone') !!}
+                        {!! html()->text('phone')->attributes(['class' => 'form-control']) !!}
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('birth', trans('admin_message.users.birth')) !!}
-                        {!! Form::date('birth', $user->exists ?  \Carbon\Carbon::parse($user->birth):  \Carbon\Carbon::now(),['class' => 'form-control']) !!}
+                        {!! html()->label(trans('admin_message.users.birth'), 'birth') !!}
+                        {!! html()->date('birth', $user->exists ?  \Carbon\Carbon::parse($user->birth):  \Carbon\Carbon::now())->attributes(['class' => 'form-control']) !!}
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('note',trans('admin_message.users.note')) !!}
-                        {!! Form::textarea('note', null,['class' => 'form-control', 'rows' => 2]) !!}
+                        {!! html()->label(trans('admin_message.users.note'), 'note') !!}
+                        {!! html()->textarea('note')->attributes(['class' => 'form-control', 'rows' => 2]) !!}
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('avatar', trans('admin_message.users.avatar')) !!}
-                        {!! Form::file('avatar', ['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
+                        {!! html()->label(trans('admin_message.users.avatar'), 'avatar') !!}
+                        {!! html()->file('avatar')->attributes(['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) !!}
                     </div>
 
                 </div>
 
                 <div class="pull-right">
-                   {!! Form::submit($user->exists ? trans('admin_message.users.save') : trans('admin_message.users.create'), ['class' => 'btn btn-primary btn-flat']) !!}
+                   {!! html()->submit($user->exists ? trans('admin_message.users.save') : trans('admin_message.users.create'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                     <a href="{!! url($area.'/users') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-                    {!! Form::close() !!}
+                    {!! html()->closeModelForm() !!}
                 </div>
                 <div class="clearfix"></div>
 
@@ -115,9 +108,9 @@
                     <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(300)->generate($user->qrcode->token)) !!} ">
                     @else
                     <p>Korisnik nema QR kod.</p>
-                    {{ Form::open(['route' => [$area.'.users.qrcode.store', $user->id], 'method' => 'POST']) }}
+                    {{ html()->form('POST', route($area.'.users.qrcode.store', $user->id))->open() }}
                         <button type="submit" class="btn btn-primary btn-flat">Kreiraj QR kod</button>
-                    {!! Form::close() !!}
+                    {!! html()->form()->close() !!}
                     @endif
             </div>
         </div>
@@ -132,14 +125,14 @@
 
                         <h3>{{ trans('admin_message.users.sendpassword')  }}</h3>
 
-                        {{ Form::open(['url' => 'password/email', 'method' => 'POST']) }}
+                        {{ html()->form('POST', url('password/email'))->open() }}
                             <div class="form-group hidden">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ $user->email }}" >
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-block"  onclick="this.disabled=true;this.form.submit();" >{{ trans('admin_message.sendpassword')  }}</button>
                             </div>
-                        {!! Form::close() !!}
+                        {!! html()->form()->close() !!}
                 </div>
 
             </div>

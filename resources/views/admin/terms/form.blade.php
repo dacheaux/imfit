@@ -24,13 +24,7 @@
             </div>
 
             <div class="box-body">
-                {!! Form::model($terms, [
-                    'id' => 'term-form',
-                    'method' => $terms->exists ? 'put' : 'post',
-                    'route'  => $terms->exists ?
-                     ['admin.terms.update', $terms->id]:
-                     ['admin.terms.store']
-                ]) !!}
+                {!! html()->modelForm($terms, $terms->exists ? 'put' : 'post', ($terms->exists ? route('admin.terms.update', $terms->id) : route('admin.terms.store')))->attributes(['id' => 'term-form'])->open() !!}
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="workout_id">{{ trans('admin_message.term.workout') }}:</label>
@@ -53,7 +47,7 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('start_datetime', trans('admin_message.term.start_datetime')) !!}
+                        {!! html()->label(trans('admin_message.term.start_datetime'), 'start_datetime') !!}
                         <div class='input-group date' id='start_datetime'>
                             <input type='text' class="form-control" name="start_datetime"  {!!  isset($userTerm->userTerms) ? 'disabled': ''!!}
                             value="" />
@@ -63,7 +57,7 @@
 
                     @if(  $terms->exists )
                     <div class="form-group">
-                        {!! Form::label('end_datetime', trans('admin_message.term.end_datetime')) !!}
+                        {!! html()->label(trans('admin_message.term.end_datetime'), 'end_datetime') !!}
                         <div class='input-group date' id='end_datetime'>
                             <input type='text' class="form-control" name="end_datetime"  {!!  $terms->exists ? 'disabled': ''!!}
                             value="" />
@@ -74,24 +68,24 @@
 
                     <div class="form-group">
                         <div class='input-group '>
-                            {!! Form::label('slots', trans('admin_message.term.slot')) !!}
-                            {!! Form::number('slots', $terms->exists ? $terms->slots : '', ['class' => 'form-control', 'min' => 0]) !!}
+                            {!! html()->label(trans('admin_message.term.slot'), 'slots') !!}
+                            {!! html()->number('slots', $terms->exists ? $terms->slots : '')->attributes(['class' => 'form-control', 'min' => 0]) !!}
                         </div>
                     </div>
                     <div class="form-group">
                         <div class='input-group '>
-                            {!! Form::label('note', trans('admin_message.term.note')) !!}
-                            {!! Form::textarea('note', $terms->exists ? $terms->note : '', ['class' => 'form-control']) !!}
+                            {!! html()->label(trans('admin_message.term.note'), 'note') !!}
+                            {!! html()->textarea('note', $terms->exists ? $terms->note : '')->attributes(['class' => 'form-control']) !!}
                         </div>
                     </div>
 
                     <div class="form-group pull-right">
-                        {!! Form::submit($terms->exists ? trans('admin_message.users.save') : trans('admin_message.term.create'), ['class' => 'btn btn-primary btn-flat']) !!}
+                        {!! html()->submit($terms->exists ? trans('admin_message.users.save') : trans('admin_message.term.create'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                         <a href="{!! url('admin/terms') !!}" title="{{ trans('admin_message.cancel') }}"
                            class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
                     </div>
 
-                    {!! Form::close() !!}
+                    {!! html()->closeModelForm() !!}
 
                     @if(  $terms->exists  && $terms->start_datetime > \Carbon\Carbon::now() &&  !count($userTerm->userTerms))
                         <div class="clearfix"></div>

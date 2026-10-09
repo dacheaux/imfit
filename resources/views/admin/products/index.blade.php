@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                {{ Form::open() }}
+                {{ html()->form('POST')->open() }}
 
                 <div class="form-group">
                     <div class="col-md-4">
@@ -56,11 +56,11 @@
                                 @endif
                             @endforeach
                         </select>
-                        {!! Form::hidden('category_id', 1, ['id' => 'categoryId']) !!}
+                        {!! html()->hidden('category_id', 1)->attributes(['id' => 'categoryId']) !!}
                     </div>
                 </div>
 
-                {{ Form::close() }}
+                {{ html()->form()->close() }}
 
             </div>
 

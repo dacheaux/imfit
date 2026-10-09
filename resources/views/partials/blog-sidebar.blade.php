@@ -1,11 +1,11 @@
 <div class="ff_sidebar_wrapper">
     <div class="widget widget_search">
-        {!! Form::open(['url'=>'treninzi/pretraga','method'=>'GET']) !!}
+        {!! html()->form('GET', url('treninzi/pretraga'))->open() !!}
             <div class="input-group">
                 <input class="form-control" type="search" name="q" placeholder="Pretraga" value="{{isset($term) ? $term : ''}}">
                 <button class="search_btn"><i class="fa fa-search"></i></button>
             </div>
-        {!! Form::close() !!}
+        {!! html()->form()->close() !!}
     </div>
     <div class="widget widget_categories">
         <h4 class="widget-title">Таgovi</h4>

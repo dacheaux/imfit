@@ -20,27 +20,22 @@
                 <h3>{{$accountplans->exists ? trans('admin_message.plans.edit_workout') .' '.$accountplans->name : trans('admin_message.plans.create_plan')}}</h3>
             </div>
             <div class="box-body">
-                {!! Form::model($accountplans, [
-                    'method' => $accountplans->exists ? 'put' : 'post',
-                    'route'  => $accountplans->exists ?
-                     ['admin.accountplans.update', $accountplans->id]:
-                     ['admin.accountplans.store']
-                ]) !!}
+                {!! html()->modelForm($accountplans, $accountplans->exists ? 'put' : 'post', ($accountplans->exists ? route('admin.accountplans.update', $accountplans->id) : route('admin.accountplans.store')))->open() !!}
 
                 <div class="form-group">
-                    {!! Form::label('plan_name', trans('admin_message.plans.name')) !!}
-                    {!! Form::text('plan_name', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.plans.name'), 'plan_name') !!}
+                    {!! html()->text('plan_name')->attributes(['class' => 'form-control']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('deposit_amount', trans('admin_message.plans.price')) !!}
-                    {!! Form::text('deposit_amount', null,['class' => 'form-control']) !!}
+                    {!! html()->label(trans('admin_message.plans.price'), 'deposit_amount') !!}
+                    {!! html()->text('deposit_amount')->attributes(['class' => 'form-control']) !!}
                 </div>
 
 
-                {!! Form::submit($accountplans->exists ? trans('admin_message.plans.save_workout') : trans('admin_message.plans.create_plan'), ['class' => 'btn btn-primary btn-flat']) !!}
+                {!! html()->submit($accountplans->exists ? trans('admin_message.plans.save_workout') : trans('admin_message.plans.create_plan'))->attributes(['class' => 'btn btn-primary btn-flat']) !!}
                 <a href="{!! url('admin/accountplans') !!}" title="{{ trans('admin_message.cancel') }}" class="btn btn-danger btn-flat">{{ trans('admin_message.cancel') }}</a>
-               {!! Form::close() !!}
+               {!! html()->closeModelForm() !!}
             </div>
         </div>
     </div>

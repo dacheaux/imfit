@@ -1,1 +1,1 @@
-{!! Form::checkbox('seen', $plans->id,  $plans->seen) !!}
+{!! html()->checkbox('seen', $plans->seen, $plans->id)->forgetAttribute('id') !!}

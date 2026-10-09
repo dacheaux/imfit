@@ -21,7 +21,7 @@
                 <form method="POST"  class="form-inline" id="coaches-form" role="form">
 
                     <div class="form-group">
-                        {!! Form::label('from', trans('admin_message.term.from')) !!}
+                        {!! html()->label(trans('admin_message.term.from'), 'from') !!}
                         <div class='input-group date' id='from'>
                             <input type='text' class="form-control" name="from"
                             value="" />
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('to', trans('admin_message.term.to')) !!}
+                        {!! html()->label(trans('admin_message.term.to'), 'to') !!}
                         <div class='input-group date' id='to'>
                             <input type='text' class="form-control" name="to"
                             value="" />

@@ -39,18 +39,12 @@
                     <h3>{{$product->exists ?  'Izmena proizvoda:'.' '.$product->title :  'Dodavanje proizvoda'}}</h3>
                 </div>
                 <div class="box-body">
-                    {{ Form::model($product, [
-                        'files' => true,
-                        'method' => $product->exists ? 'put' : 'post',
-                        'route'  => $product->exists ?
-                         ['admin.products.update', $product->id]:
-                         ['admin.products.store']
-                    ]) }}
+                    {{ html()->modelForm($product, $product->exists ? 'put' : 'post', ($product->exists ? route('admin.products.update', $product->id) : route('admin.products.store')))->acceptsFiles()->open() }}
 
                     <div class="form-group">
                         <span class="help-block">(*776x860)</span>
-                        {{ Form::label('product_image', 'Slika proizvoda') }}
-                        {{ Form::file('product_image', ['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) }}
+                        {{ html()->label('Slika proizvoda', 'product_image') }}
+                        {{ html()->file('product_image')->attributes(['class' => 'file', 'data-preview-file-type' => 'text', 'accept' => 'image/*']) }}
                     </div>
 
                     <div class="form-group">
@@ -68,33 +62,33 @@
                                 @endif
                             @endforeach
                         </select>
-                        {!! Form::hidden('category_id', $product->exists ? $product->category_id : 1, ['id' => 'categoryId']) !!}
+                        {!! html()->hidden('category_id', $product->exists ? $product->category_id : 1)->attributes(['id' => 'categoryId']) !!}
                     </div>
 
                     <div class="form-group">
-                        {{ Form::label('product_name', 'Naziv') }}
-                        {{ Form::text('product_name', null,['class' => 'form-control']) }}
+                        {{ html()->label('Naziv', 'product_name') }}
+                        {{ html()->text('product_name')->attributes(['class' => 'form-control']) }}
                     </div>
 
                     <div class="form-group">
-                        {{ Form::label('product_price', 'Cena') }}
-                        {{ Form::text('product_price', null,['class' => 'form-control']) }}
+                        {{ html()->label('Cena', 'product_price') }}
+                        {{ html()->text('product_price')->attributes(['class' => 'form-control']) }}
 
                     </div>
                     <div class="form-group">
-                        {{ Form::label('product_quantity', 'Količina') }}
-                        {{ Form::text('product_quantity', null,['class' => 'form-control']) }}
+                        {{ html()->label('Količina', 'product_quantity') }}
+                        {{ html()->text('product_quantity')->attributes(['class' => 'form-control']) }}
 
                     </div>
 
                     <div class="form-group">
-                        {{ Form::label('product_description', 'Opis') }}
-                        {{ Form::textarea('product_description', null,['class' => 'form-control', 'id' => 'editor2']) }}
+                        {{ html()->label('Opis', 'product_description') }}
+                        {{ html()->textarea('product_description')->attributes(['class' => 'form-control', 'id' => 'editor2']) }}
                     </div>
 
-                    {{ Form::submit($product->exists ? 'Sačuvaj izmene': 'Kreiraj proizvod', ['class' => 'btn btn-primary btn-flat']) }}
+                    {{ html()->submit($product->exists ? 'Sačuvaj izmene': 'Kreiraj proizvod')->attributes(['class' => 'btn btn-primary btn-flat']) }}
                     <a href="{{ url('admin/products') }}" title="Odustani" class="btn btn-danger btn-flat">Odustani</a>
-                    {{ Form::close() }}
+                    {{ html()->closeModelForm() }}
                 </div>
             </div>
         </div>

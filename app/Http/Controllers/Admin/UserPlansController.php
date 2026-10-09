@@ -163,7 +163,7 @@ class UserPlansController extends Controller
         $userplans = $this->userplans->where('user_id', $request->get('user_id'))->findOrFail($id);
         $userplans->pause_flag = 0;
         $userplans->pause_time =  Carbon::now();
-        $userplans->expired_time = Carbon::now()->addDays( $userplans->pause_from->diffInDays($userplans->expired_time) );
+        $userplans->expired_time = Carbon::now()->addDays( (int) $userplans->pause_from->diffInDays($userplans->expired_time, true) );
         $userplans->update();
 
         flash()->overlay(trans('flash.success'),trans('flash.userplans.spausedoff'));

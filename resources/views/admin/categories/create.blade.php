@@ -9,7 +9,7 @@
 
             <div class="col-md-6">
 
-            {!! Form::open(['route' => ['admin.categories.store'], 'method' => 'POST']) !!}
+            {!! html()->form('POST', route('admin.categories.store'))->open() !!}
 
                 @if(isset($category['id']))
                     <input type="hidden" name="id" value="{{ $category['id'] }}" >
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-            {!! Form::close() !!}
+            {!! html()->form()->close() !!}
             </div>
 
         </div>

@@ -20,17 +20,17 @@
     <div class="box box-primary">
          <div class="box-header">
 
-            {{ Form::open() }}
+            {{ html()->form('POST')->open() }}
 
                 <div class="form-group">
                      <div class="col-md-4">
                          <label for="pages">Izaberi stranu:</label>
-                        {!! Form::select('pages', $pages,  null,['class' => 'form-control', 'id' => 'photo_id']) !!}
-                        {!! Form::hidden('page_id', 1, ['id' => 'page_id']) !!}
+                        {!! html()->select('pages', $pages)->attributes(['class' => 'form-control', 'id' => 'photo_id']) !!}
+                        {!! html()->hidden('page_id', 1)->attributes(['id' => 'page_id']) !!}
                     </div>
                 </div>
 
-            {{ Form::close() }}
+            {{ html()->form()->close() }}
         </div>
         <div class="box-body">
 
