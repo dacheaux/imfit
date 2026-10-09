@@ -3,15 +3,17 @@
     Builds a cPanel release zip from a git commit.
 
 .DESCRIPTION
-    Exports the commit with `git archive`, installs production composer
-    dependencies into it, and packages two folders that are extracted in the
-    cPanel home directory (/home/imfitrs):
+    Exports the commit with `git archive --format=zip`, installs production
+    composer dependencies, and packages a Laravel 10-style zip that is
+    extracted inside /home/imfitrs/fitapp:
 
-        fitapp/       the Laravel app, including vendor/
-        public_html/  the contents of public/, with an index.php that loads ../fitapp
+        app, bootstrap/app.php, bootstrap/cache/.gitignore, config, database,
+        resources, routes, vendor, artisan, composer.json, composer.lock,
+        RELEASE.txt
 
-    The server's .env, public_html/.htaccess, public_html/images and storage/
-    contents are never part of the zip.
+    public/, storage/, .env and public_html/ stay on the server and are not
+    in the zip. The zip is written by Git (not Windows tar.exe) so cPanel
+    does not treat it as a zip bomb.
 
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1
@@ -22,6 +24,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+Add-Type -AssemblyName System.IO.Compression
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 Set-Location $root
@@ -50,8 +55,8 @@ $zipName = "release-$stamp-$sha.zip"
 $build = Join-Path $root 'build'
 $dist = Join-Path $root 'dist'
 $app = Join-Path $build 'fitapp'
-$publicHtml = Join-Path $build 'public_html'
-$tar = Join-Path $env:SystemRoot 'System32\tar.exe'
+$sourceZip = Join-Path $build 'source.zip'
+$zipPath = Join-Path $dist $zipName
 
 if (Test-Path $build) {
     Remove-Item $build -Recurse -Force
@@ -60,82 +65,94 @@ New-Item -ItemType Directory -Path $app | Out-Null
 New-Item -ItemType Directory -Path $dist -Force | Out-Null
 
 Write-Host "Exporting $Ref ($sha)..."
-$archive = Join-Path $build 'source.tar'
-Invoke-Native 'git archive' { git archive --format=tar -o $archive $Ref }
-Invoke-Native 'Extracting source' { & $tar -xf $archive -C $app }
-Remove-Item $archive
+Invoke-Native 'git archive' { git archive --format=zip -o $sourceZip $Ref }
+[System.IO.Compression.ZipFile]::ExtractToDirectory($sourceZip, $app)
+Remove-Item $sourceZip
 
 Write-Host 'Installing production composer dependencies...'
 Invoke-Native 'composer install' {
     composer install --working-dir="$app" --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress
 }
 
-# Caches with absolute paths must be built on the server (via /_deploy/{token}).
-foreach ($cache in 'config.php', 'routes-v7.php', 'routes.php', 'events.php') {
-    $path = Join-Path $app "bootstrap\cache\$cache"
-    if (Test-Path $path) {
-        Remove-Item $path -Force
-    }
+# Cached PHP files contain absolute Windows paths; regenerate them on the server.
+Get-ChildItem (Join-Path $app 'bootstrap\cache') -Filter '*.php' -ErrorAction SilentlyContinue |
+    Remove-Item -Force
+
+$keep = @(
+    'app',
+    'bootstrap',
+    'config',
+    'database',
+    'resources',
+    'routes',
+    'vendor',
+    'artisan',
+    'composer.json',
+    'composer.lock'
+)
+Get-ChildItem $app -Force | Where-Object { $keep -notcontains $_.Name } | ForEach-Object {
+    Remove-Item $_.FullName -Recurse -Force
 }
 
-# Empty storage skeleton; extracting never removes existing logs, sessions or uploads.
-$storage = Join-Path $app 'storage'
-foreach ($dir in 'framework', 'logs') {
-    $path = Join-Path $storage $dir
+# storage/ and public/ stay on the server. bootstrap/cache keeps only .gitignore.
+foreach ($extra in 'public', 'storage') {
+    $path = Join-Path $app $extra
     if (Test-Path $path) {
         Remove-Item $path -Recurse -Force
     }
 }
-foreach ($dir in 'framework\cache\data', 'framework\sessions', 'framework\views', 'logs') {
-    $path = Join-Path $storage $dir
-    New-Item -ItemType Directory -Path $path -Force | Out-Null
-    Set-Content -Path (Join-Path $path '.gitignore') -Value "*`n!.gitignore" -NoNewline -Encoding ascii
-}
-
-Write-Host 'Moving public/ to public_html/...'
-Move-Item (Join-Path $app 'public') $publicHtml
-
-$indexPhp = @'
-<?php
-
-use Illuminate\Http\Request;
-
-define('LARAVEL_START', microtime(true));
-
-// public_html sits next to the app folder in the cPanel home directory.
-$appPath = __DIR__.'/../fitapp';
-
-if (file_exists($maintenance = $appPath.'/storage/framework/maintenance.php')) {
-    require $maintenance;
-}
-
-require $appPath.'/vendor/autoload.php';
-
-$app = require_once $appPath.'/bootstrap/app.php';
-
-// Uploads and QR codes are written with public_path(), so it must point here.
-$app->usePublicPath(__DIR__);
-
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
-$response = $kernel->handle(
-    $request = Request::capture()
-);
-
-$response->send();
-
-$kernel->terminate($request, $response);
-'@
-[IO.File]::WriteAllText((Join-Path $publicHtml 'index.php'), $indexPhp.Replace("`r`n", "`n"))
 
 $releaseInfo = "ref: $Ref`ncommit: $fullSha`nbuilt: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss zzz')`n"
-[IO.File]::WriteAllText((Join-Path $app 'RELEASE.txt'), $releaseInfo)
+[IO.File]::WriteAllText((Join-Path $app 'RELEASE.txt'), $releaseInfo.Replace("`r`n", "`n"))
 
-Write-Host "Packaging $zipName..."
-$zipPath = Join-Path $dist $zipName
-Invoke-Native 'Creating zip' { & $tar -a -c -f $zipPath -C $build fitapp public_html }
+Write-Host "Packaging $zipName with git archive..."
+Invoke-Native 'git init (staging)' { git -C $app init --quiet }
+Invoke-Native 'git add (staging)' { git -C $app -c core.autocrlf=false add -A }
+Invoke-Native 'git commit (staging)' {
+    git -C $app `
+        -c core.autocrlf=false `
+        -c user.email=release@local `
+        -c user.name=release `
+        commit --quiet -m "release $sha"
+}
+Invoke-Native 'git archive zip' { git -C $app archive --format=zip -o $zipPath HEAD }
 
 Remove-Item $build -Recurse -Force
 
+Write-Host 'Inspecting zip...'
+$archive = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
+try {
+    $names = @($archive.Entries | ForEach-Object { $_.FullName.Replace('\', '/') })
+    $backslash = @($archive.Entries | Where-Object { $_.FullName -match '\\' })
+    if ($backslash.Count -gt 0) {
+        throw "Zip has $($backslash.Count) backslash paths; Git zip should use forward slashes."
+    }
+    if ($names -notcontains 'vendor/autoload.php') {
+        throw 'Zip is missing vendor/autoload.php.'
+    }
+    if ($names -notcontains 'artisan' -or $names -notcontains 'composer.lock') {
+        throw 'Zip is missing artisan or composer.lock.'
+    }
+    $blocked = $names | Where-Object {
+        $_ -match '(^|/)\.env($|\.)' -or
+        $_ -match '^public(/|$)' -or
+        $_ -match '^storage(/|$)' -or
+        $_ -match '^vendor/phpunit/' -or
+        $_ -match '^vendor/spatie/laravel-ignition/' -or
+        $_ -match '^vendor/barryvdh/' -or
+        $_ -match '^vendor/nunomaduro/collision/' -or
+        $_ -match '^vendor/beyondcode/'
+    }
+    if ($blocked) {
+        throw "Zip contains files that must stay out of a release:`n$($blocked -join "`n")"
+    }
+    $entryCount = $names.Count
+    if ($entryCount -gt 12000) {
+        throw "Zip has $entryCount entries; expected the Laravel 10 range (thousands, not 17k+)."
+    }
+} finally {
+    $archive.Dispose()
+}
+
 $sizeMb = [Math]::Round((Get-Item $zipPath).Length / 1MB, 1)
-Write-Host "Done: dist\$zipName ($sizeMb MB)"
+Write-Host "Done: dist\$zipName ($sizeMb MB, $entryCount entries)"
