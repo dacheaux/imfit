@@ -1,7 +1,17 @@
 /node_modules
 /public/hot
 /public/storage
+/public/assets
+/public/assets-admin
+/public/img
 /public/images
+/public/gallery
+/public/upload-posts
+/public/uploads/*
+!/public/uploads/no-image.jpg
+!/public/uploads/products/
+/public/uploads/products/*
+!/public/uploads/products/no-image.jpg
 /storage/*.key
 /storage/logs/*
 !/storage/logs/.gitkeep

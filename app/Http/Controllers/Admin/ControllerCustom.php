@@ -14,7 +14,7 @@ class ControllerCustom extends Controller
     public function imageUpload(Request $request) {
         $file = $request->file('imagefile');
         $fname = Str::random(10).$file->getClientOriginalName();
-        $file->move('upload-posts', $fname);
+        $file->move(public_path('upload-posts'), $fname);
         $file_path = url('upload-posts').'/'.$fname;
 
         return view('admin._image-upload', compact('file_path'));

@@ -15,9 +15,6 @@ require $appPath.'/vendor/autoload.php';
 
 $app = require_once $appPath.'/bootstrap/app.php';
 
-// Uploads and QR codes are written with public_path(), so it must point here.
-$app->usePublicPath(__DIR__);
-
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(

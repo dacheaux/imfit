@@ -36,7 +36,7 @@ class Photo extends Model
 
     public function move(UploadedFile $file)
     {
-        $file->move($this->baseDir, $this->name);
+        $file->move(public_path($this->baseDir), $this->name);
 
         $this->makeThumb();
 
@@ -45,9 +45,9 @@ class Photo extends Model
 
     public function makeThumb()
     {
-        Image::make($this->path)
+        Image::make(public_path($this->path))
             ->fit(200)
-            ->save($this->thumbnail_path);
+            ->save(public_path($this->thumbnail_path));
     }
 
     public function page()

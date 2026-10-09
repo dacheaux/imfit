@@ -15,6 +15,11 @@ $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
 
+$publicHtml = realpath(__DIR__.'/../../public_html');
+if ($publicHtml !== false) {
+    $app->usePublicPath($publicHtml);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
