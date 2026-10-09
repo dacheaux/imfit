@@ -13,10 +13,17 @@ class AddPaymentToEntrancesTable extends Migration
      */
     public function up()
     {
+        // Some databases already have these columns without this migration recorded as run.
         Schema::table('entrances', function (Blueprint $table) {
-            $table->integer('payment_status')->unsigned()->default(0);
-            $table->integer('plan_status')->unsigned()->default(0);
-            $table->string('message')->nullable();
+            if (! Schema::hasColumn('entrances', 'payment_status')) {
+                $table->integer('payment_status')->unsigned()->default(0);
+            }
+            if (! Schema::hasColumn('entrances', 'plan_status')) {
+                $table->integer('plan_status')->unsigned()->default(0);
+            }
+            if (! Schema::hasColumn('entrances', 'message')) {
+                $table->string('message')->nullable();
+            }
         });
     }
 
