@@ -209,3 +209,6 @@ Route::post('/image/upload', [
     'uses' => 'Admin\ControllerCustom@imageUpload'
 ]);
 Auth::routes();
+
+// Post-deploy tasks (cPanel has no terminal)
+Route::get('_deploy/{token}', 'DeployController')->middleware('throttle:3,1');

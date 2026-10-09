@@ -112,6 +112,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Deploy Token
+    |--------------------------------------------------------------------------
+    |
+    | Secret for the /_deploy/{token} URL that runs migrations and rebuilds
+    | caches after a release zip is extracted. Leave empty to disable it.
+    |
+    */
+
+    'deploy_token' => env('DEPLOY_TOKEN'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
