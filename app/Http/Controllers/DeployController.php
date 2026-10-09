@@ -21,16 +21,8 @@ class DeployController extends Controller
             abort(404);
         }
 
-        // With no recorded migrations, migrate would load database/schema/mysql-schema.dump,
-        // which drops and recreates every table.
-        if (! app('migrator')->hasRunAnyMigrations()) {
-            return response("Refusing to deploy: the migrations table is missing or empty.\n", 409)
-                ->header('Content-Type', 'text/plain; charset=UTF-8');
-        }
-
         $commands = [
             ['optimize:clear', []],
-            ['migrate', ['--force' => true]],
         ];
 
         if (! file_exists(public_path('storage'))) {

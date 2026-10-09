@@ -115,8 +115,8 @@ return [
     | Deploy Token
     |--------------------------------------------------------------------------
     |
-    | Secret for the /_deploy/{token} URL that runs migrations and rebuilds
-    | caches after a release zip is extracted. Leave empty to disable it.
+    | Secret for the /_deploy/{token} URL that rebuilds caches after a
+    | release zip is extracted. Leave empty to disable it.
     |
     */
 

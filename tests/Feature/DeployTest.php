@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class DeployTest extends TestCase
@@ -39,7 +38,7 @@ class DeployTest extends TestCase
             ->assertSee('Deploy finished OK.');
 
         $this->assertSame('optimize:clear', $called[0]);
-        $this->assertSame('migrate', $called[1]);
+        $this->assertNotContains('migrate', $called);
         $this->assertContains('config:cache', $called);
         $this->assertContains('view:cache', $called);
         $this->assertNotContains('route:cache', $called);
@@ -49,22 +48,12 @@ class DeployTest extends TestCase
     {
         config()->set('app.deploy_token', 'secret-token');
 
-        Artisan::shouldReceive('call')->andReturnUsing(fn ($command) => $command === 'migrate' ? 1 : 0);
+        Artisan::shouldReceive('call')->andReturnUsing(fn ($command) => $command === 'config:cache' ? 1 : 0);
         Artisan::shouldReceive('output')->andReturn('');
 
         $this->get('/_deploy/secret-token')
             ->assertStatus(500)
             ->assertSee('FAILED (exit code 1)')
             ->assertSee('Deploy finished with errors.');
-    }
-
-    public function test_deploy_url_refuses_to_load_schema_dump_over_existing_data()
-    {
-        config()->set('app.deploy_token', 'secret-token');
-        DB::table('migrations')->delete();
-
-        Artisan::shouldReceive('call')->never();
-
-        $this->get('/_deploy/secret-token')->assertStatus(409);
     }
 }
