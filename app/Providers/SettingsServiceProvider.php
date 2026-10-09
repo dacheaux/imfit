@@ -17,21 +17,40 @@ class SettingsServiceProvider extends ServiceProvider
     {
         try {
             $settings = $cache->remember('settings', now()->addMinutes(60), function () use ($settings) {
-                return $settings->find(1);
+                $row = $settings->find(1);
+
+                return $row ? $this->settingsArray($row) : null;
             });
         } catch (\Throwable $e) {
             $settings = null;
         }
 
-        if (! $settings) {
-            $settings = [
-                'time_book' => 3,
-                'time_delay' => 6,
-                'time_pause' => 7,
+        config()->set('settings', $this->settingsArray($settings));
+    }
+
+    /**
+     * @param  mixed  $settings
+     * @return array{time_book: mixed, time_delay: mixed, time_pause: mixed}
+     */
+    protected function settingsArray($settings): array
+    {
+        if ($settings instanceof GlobalConf) {
+            return $settings->only(['time_book', 'time_delay', 'time_pause']);
+        }
+
+        if (is_array($settings)) {
+            return [
+                'time_book' => $settings['time_book'] ?? 3,
+                'time_delay' => $settings['time_delay'] ?? 6,
+                'time_pause' => $settings['time_pause'] ?? 7,
             ];
         }
 
-        config()->set('settings', $settings);
+        return [
+            'time_book' => 3,
+            'time_delay' => 6,
+            'time_pause' => 7,
+        ];
     }
 
     /**

@@ -53,7 +53,7 @@ abstract class TestCase extends BaseTestCase
             $settings = GlobalConf::factory()->create();
         }
 
-        config()->set('settings', $settings);
+        config()->set('settings', $settings->only(['time_book', 'time_delay', 'time_pause']));
     }
 
     protected function mockQrCode()
