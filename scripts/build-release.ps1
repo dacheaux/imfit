@@ -4,7 +4,7 @@
 
 .DESCRIPTION
     Exports the commit with `git archive --format=zip`, installs production
-    composer dependencies, and packages a Laravel 10-style zip that is
+    composer dependencies, and packages a Laravel 12 zip that is
     extracted inside /home/imfitrs/fitapp:
 
         app, bootstrap/app.php, bootstrap/cache/.gitignore, config, database,
@@ -148,7 +148,7 @@ try {
     }
     $entryCount = $names.Count
     if ($entryCount -gt 12000) {
-        throw "Zip has $entryCount entries; expected the Laravel 10 range (thousands, not 17k+)."
+        throw "Zip has $entryCount entries; expected the Laravel 12 range (thousands, not 17k+)."
     }
 } finally {
     $archive.Dispose()
